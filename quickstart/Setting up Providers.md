@@ -1,6 +1,6 @@
 ---
 title: Setting up Providers
-category: 63ce4f6008ed7e0016ef2eaa
+category: 63d13748941c7a001b58934a
 ---
 # Setting up Providers
 

@@ -1,6 +1,6 @@
 ---
 title: Quickstart
-category: 63ce4f6008ed7e0016ef2eaa
+category: 63d13748941c7a001b58934a
 ---
 # Quickstart
 
@@ -8,7 +8,7 @@ Fiberplane Studio is available for the [Web](https://fiberplane.com/).
 
 To get started go to [https://fiberplane.com/](https://fiberplane.com/) and log in with your Fiberplane account (currently available only for Google Workspace users). You can also go right away to your notebook by typing [fp.new](https://fp.new/) in your URL, however, to save and store your notebook, you will need to log in.
 
-![Proxy slide (1).png](Quickstart%20cce7b6fa53144989b6835feb900e32dc/Proxy_slide_(1).png)
+![Proxy slide](./proxy_slide.png)
 
 ## How Fiberplane works
 
@@ -46,7 +46,7 @@ In order for the Proxy to talk to the Fiberplane Studio successfully it needs to
 
 Download and install the Fiberplane CLI
 
-```bash
+```shell
 curl --proto '=https' --tlsv1.2 -sSf https://fp.dev/install.sh | sh
 ```
 
@@ -58,13 +58,13 @@ Or download the Fiberplane CLI manually (make sure to make it executable):
 
 Authenticate your CLI with Fiberplane
 
-```bash
+```shell
 fp login
 ```
 
 To register a proxy run a command `fp proxies create`:
 
-```bash
+```shell
 $ fp proxies create my-proxy-name
 				Name:  my-proxy-name
           ID:  <generated_proxy_id>
