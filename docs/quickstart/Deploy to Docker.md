@@ -1,3 +1,8 @@
+---
+title: Deploy to Docker
+category: 63ce4f6008ed7e0016ef2eaa
+---
+
 # Deploy to Docker
 
 ## Generate a Proxy API Token in the Studio

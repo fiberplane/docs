@@ -1,3 +1,7 @@
+---
+title: Deploy to Kubernetes
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Deploy to Kubernetes
 
 ## Generate a Proxy API Token in the Studio

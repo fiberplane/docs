@@ -1,3 +1,7 @@
+---
+title: Command Reference
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Command Reference
 
 To list all of the available commands in the CLI type

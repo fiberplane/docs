@@ -1,3 +1,7 @@
+---
+title: Templates
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Templates
 
 Programmatically create Fiberplane Notebooks for repeatable workflows.

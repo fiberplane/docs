@@ -1,3 +1,7 @@
+---
+title: Working with parameters
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Working with parameters
 
 Parameters are values that can be inserted in the notebook programmatically when a template is invoked. They’re like arguments in a CLI commands or content objects in some front-end templating languages like Liquid.

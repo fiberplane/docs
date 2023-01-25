@@ -1,3 +1,8 @@
+---
+title: fp run and Shell to Cell
+category: 63ce4f6008ed7e0016ef2eaa
+---
+
 # fp run and Shell to Cell
 
 If you’re an SRE or infrastructure engineer - chances are you spend much of your work time in your shell. Besides querying providers from the Fiberplane notebook, you can easily send your shell comand and output data to a notebook to examine and share with your colleagues.

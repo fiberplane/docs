@@ -1,12 +1,5 @@
 {
-  "dependencies": {
-    "next": "^13.1.4",
-    "nextra": "^2.2.12",
-    "nextra-theme-docs": "^2.2.12",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
   "devDependencies": {
-    "@types/node": "^18.11.18"
+    "rdme": "^8.4.0"
   }
 }

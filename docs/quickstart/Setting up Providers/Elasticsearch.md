@@ -1,3 +1,7 @@
+---
+title: Elasticsearch
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Elasticsearch
 
 Use Elasticsearch to view logs from your infrastructure and application. If you don’t have a running Elasticsearch instance, you can use our starter kit to start it up - find instructions below!

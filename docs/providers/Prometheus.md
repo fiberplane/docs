@@ -1,3 +1,7 @@
+---
+title: Prometheus
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Prometheus
 
 Write and run PromQL queries, and display Prometheus charts and tables alongside the rest of your content.

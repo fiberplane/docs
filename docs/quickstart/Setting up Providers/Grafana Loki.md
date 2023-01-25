@@ -1,3 +1,7 @@
+---
+title: Grafana Loki
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Grafana Loki
 
 Use Loki to view logs from your infrastructure and application. If you don’t have a running Loki instance, you can use our starter kit to start it up - instructions below!

@@ -1,3 +1,8 @@
+---
+title: Providers
+category: 63ce4f6008ed7e0016ef2eaa
+---
+
 # Providers
 
 Providers are full-stack plugins in Fiberplane that allow you to pull in live data directly from your infrastructure data sources into your Notebooks. They are compiled to WebAssembly and can run both on the Studio and the Proxy.

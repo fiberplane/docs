@@ -1,3 +1,7 @@
+---
+title: Elasticsearch
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Elasticsearch
 
 Write and run Lucene queries, and show Elasticsearch logs alongside the rest of your content.

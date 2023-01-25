@@ -1,3 +1,7 @@
+---
+title: Run Local (Docker)
+category: 63ce4f6008ed7e0016ef2eaa
+---
 # Run Local (Docker)
 
 <aside>
