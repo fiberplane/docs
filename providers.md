@@ -1,6 +1,7 @@
 ---
 title: Providers
-category: 63d137589bdc7d088088086c
+category: 63d7e8bdbf7b4b0e0745e823
+slug: providers
 ---
 
 # Providers

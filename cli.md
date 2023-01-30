@@ -1,6 +1,7 @@
 ---
 title: CLI
-category: 63ce4f6008ed7e0016ef2eaa
+category: 63d7e8bf2482560ba8b126e0
+slug: cli
 ---
 # CLI
 

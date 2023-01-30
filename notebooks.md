@@ -1,6 +1,7 @@
 ---
 title: Notebooks
-category: 63ce4f6008ed7e0016ef2eaa
+category: 63d7e8b76ca5cd0ccaf0c482
+slug: notebooks
 ---
 
 # Notebooks
@@ -9,7 +10,7 @@ Notebooks – collaborative spaces for your team – are at the core of Fiberpla
 
 Like Jupyter notebooks or other modern block-based editors, Notebooks in Fiberplane are made up of cells.
 
-![Untitled](./notebooks/Untitled.png)
+![Untitled](notebooks/Untitled.png)
 
 ---
 
@@ -18,7 +19,7 @@ Like Jupyter notebooks or other modern block-based editors, Notebooks in Fiberpl
 The Notebook time range provides the ability to align all data source queries on the same start and end date. This way your data is aligned by default.
 Changing the start or end date of the time range will rerun the linked queries in the notebook automatically.
 
-![Untitled](./notebooks/Untitled%201.png)
+![Untitled](./notebooks/Untitled 1.png)
 
 ## Labels
 
@@ -30,7 +31,7 @@ Click `Add Label +`  to add a label, add a key-value pair separating it with `=`
 
 Anywhere in Fiberplane you can hit `⌘P`  (`CTRL-P` in Windows and Linux) to bring up the command menu. Command menu allows you to search for notebooks quickly (also using labels to filter them), navigate to sections in the app or execute actions quickly.
 
-![Untitled](./notebooks/Untitled%202.png)
+![Untitled](./notebooks/Untitled 2.png)
 
 ## Cells
 
@@ -40,7 +41,7 @@ Everything you write in a notebook is a **cell**. A cell can contain text (in it
 
  With the controls in the left margin you can delete, duplicate, lock, change cell types or move them around by dragging them.
 
-![Untitled](./notebooks/Untitled%203.png)
+![Untitled](./notebooks/Untitled 3.png)
 
 ## Rich text
 
@@ -98,7 +99,7 @@ Once a discussion is created it is marked as "Open". You can resolve and close t
 
 Comments can be edited or removed by the author by clicking the three dots on the right-hand side.
 
-![Untitled](./notebooks/Untitled%204.png)
+![Untitled](./notebooks/Untitled 4.png)
 
 ### Provider cells
 
@@ -110,4 +111,4 @@ Currently available Providers:
 
 [Elasticsearch](./providers/Elasticsearch.md) 
 
-[Grafana Loki](./providers/Grafana%20Loki.md)
+[Grafana Loki](./providers/Grafana Loki.md)

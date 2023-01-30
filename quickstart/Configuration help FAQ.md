@@ -1,6 +1,7 @@
 ---
 title: Configuration help / FAQ
-category: 63d13748941c7a001b58934a
+category: 63d7e8b49721540020f5c3ea
+slug: configuration-help-faq
 ---
 # Configuration help / FAQ
 
@@ -15,7 +16,7 @@ Many resources in Fiberplane are identified by unique names. Names follow the st
 
 ## Troubleshooting
 
-![Group 1958.png](Configuration%20help%20FAQ%2018941c30bc32404785f767ab1892c0ce/Group_1958.png)
+![Group 1958.png](Configuration help FAQ/Group_1958.png)
 
 ### If you see a red exclamation mark after running a query:
 

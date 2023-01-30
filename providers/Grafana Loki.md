@@ -1,6 +1,7 @@
 ---
 title: Grafana Loki
-category: 63d137589bdc7d088088086c
+category: 63d7e8bdbf7b4b0e0745e823
+slug: grafana-loki
 ---
 # Grafana Loki
 
@@ -40,7 +41,7 @@ By default, the query will follow the Notebook time range (configured at the top
 
 You can also set a chart-specific time range overrides by clicking the link icon at the top of the chart.
 
-![Untitled](Elasticsearch%205fb0bc4d48064d71bb85a56ba43fa4e1/Untitled.png)
+![Untitled](Elasticsearch/Untitled.png)
 
 ## Expand, select, highlight, and export records
 

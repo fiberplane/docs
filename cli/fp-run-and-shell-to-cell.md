@@ -1,6 +1,7 @@
 ---
 title: fp run and Shell to Cell
-category: 63ce4f6008ed7e0016ef2eaa
+category: 63d7e8bf2482560ba8b126e0
+slug: fp-run-and-shell-to-cell
 ---
 
 # fp run and Shell to Cell
@@ -15,7 +16,7 @@ The `fp shell` command will start recording and broadcasting your shell session 
 
 ### Initial setup
 
-Make sure you have the Fiberplane CLI installed and you’re logged in. See: [CLI](../CLI%20.md) for installation instructions.
+Make sure you have the Fiberplane CLI installed and you’re logged in. See: [CLI](../cli.md) for installation instructions.
 
 ## Run `fp run`
 
@@ -37,7 +38,7 @@ You can now share the status of your pods and services directly into the noteboo
 
 And here’s how that will look like in the notebook:
 
-![Untitled](./fp%20run%20and%20Shell%20to%20Cell/Untitled.png)
+![Untitled](./fp run and Shell to Cell/Untitled.png)
 
 ### Rich output
 

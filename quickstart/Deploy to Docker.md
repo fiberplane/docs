@@ -1,6 +1,7 @@
 ---
 title: Deploy to Docker
-category: 63d13748941c7a001b58934a
+category: 63d7e8b49721540020f5c3ea
+slug: deploy-to-docker
 ---
 
 # Deploy to Docker
@@ -43,4 +44,4 @@ docker run \
 
 Once you complete your Proxy setup, your data sources linked in the Proxy configuration should be recognized by the Studio - you can verify this again by going to the **Settings > Data Sources** screen.👇
 
-![Untitled](Deploy%20to%20Kubernetes%2026d88884937c4c389afc99b191694da1/Untitled.png)
+![Untitled](Deploy to Kubernetes/Untitled.png)

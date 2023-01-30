@@ -1,6 +1,7 @@
 ---
 title: Quickstart
-category: 63d13748941c7a001b58934a
+category: 63d7e8b49721540020f5c3ea
+slug: quickstart
 ---
 # Quickstart
 
@@ -8,7 +9,7 @@ Fiberplane Studio is available for the [Web](https://fiberplane.com/).
 
 To get started go to [https://fiberplane.com/](https://fiberplane.com/) and log in with your Fiberplane account (currently available only for Google Workspace users). You can also go right away to your notebook by typing [fp.new](https://fp.new/) in your URL, however, to save and store your notebook, you will need to log in.
 
-![Proxy slide](./proxy_slide.png)
+![Proxy slide](https://github.com/fiberplane/docs/blob/readme/proxy_slide.png?raw=true)
 
 ## How Fiberplane works
 

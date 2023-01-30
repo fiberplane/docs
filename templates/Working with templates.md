@@ -1,6 +1,6 @@
 ---
 title: Working with templates
-category: 63ce4f6008ed7e0016ef2eaa
+category: 63d7e8c259d696004978b93b
 ---
 # Working with templates
 
