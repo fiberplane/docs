@@ -3,13 +3,15 @@ title: Grafana Loki
 category: 63d7e8bdbf7b4b0e0745e823
 slug: grafana-loki
 ---
-# Grafana Loki
 
-Write and run LogQL queries, and display Grafana Loki logs output alongside the rest of your content.
+Write and run LogQL queries, and display Grafana Loki logs output alongside the
+rest of your content.
 
 # Setup
 
-In order to enable Grafana Loki Provider in Fiberplane you need to either add it via direct access (for an openly accessible URL) or add it as a valid entry in the `data_source.yaml` configuration.
+In order to enable Grafana Loki Provider in Fiberplane you need to either add it
+via direct access (for an openly accessible URL) or add it as a valid entry in
+the `data_source.yaml` configuration.
 
 The `data_sources.yaml` format for adding a Loki Provider looks like this:
 
@@ -37,11 +39,15 @@ The `data_sources.yaml` format for adding a Loki Provider looks like this:
 
 ## Chart time range
 
-By default, the query will follow the Notebook time range (configured at the top of the Notebook) so all of your charts in a notebook use the same time range. As you change the Notebook time range it will update all of your charts automatically.
+By default, the query will follow the Notebook time range (configured at the top
+of the Notebook) so all of your charts in a notebook use the same time range. As
+you change the Notebook time range it will update all of your charts
+automatically.
 
-You can also set a chart-specific time range overrides by clicking the link icon at the top of the chart.
+You can also set a chart-specific time range overrides by clicking the link icon
+at the top of the chart.
 
-![Untitled](Elasticsearch/Untitled.png)
+![Untitled](Elasticsearch/elastic-query.png)
 
 ## Expand, select, highlight, and export records
 
@@ -50,8 +56,12 @@ Once logs are loaded you can:
 - Expand to show them in a more readable view;
 - Select interesting records;
 - Highlight them for the rest of your team;
-- Export them into a separate table so they are archived and do not get affected by time range changes in the notebook.
+- Export them into a separate table so they are archived and do not get affected
+	by time range changes in the notebook.
 
 ## Add columns
 
-By default, the logs output shows in a full document body output. However, you can configure this to show only the fields you select. Click `+ Add columns` and select or unselect the fields you want to see/hide. The selected fields will show as columns in a horizontal view.
+By default, the logs output shows in a full document body output. However, you
+can configure this to show only the fields you select. Click `+ Add columns` and
+select or unselect the fields you want to see/hide. The selected fields will
+show as columns in a horizontal view.

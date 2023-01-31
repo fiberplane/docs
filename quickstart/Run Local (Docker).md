@@ -1,23 +1,29 @@
 ---
-title: Run Local (Docker)
+title: Run Local 
 category: 63d7e8b49721540020f5c3ea
 slug: run-local
 ---
-# Run Local (Docker)
 
-<aside>
-📍 **Note**: this option is suggested for testing purposes. If you intend to run the Proxy in production, it is strongly recommended to install it in your production cluster (see instructions above).
+>📍Note
+>this option is suggested for testing purposes. If you intend to
+>run the Proxy in production, it is strongly recommended to install it in your
+>production cluster (see instructions above).
 
-</aside>
 
 ## Generate a Proxy API Token in the Studio
 
-![og-image_Best practices for observability (17).png](og-image_Best_practices_for_observability_(17).png)
+![og-image_Best practices for observability
+(17).png](og-image_Best_practices_for_observability_(17).png)
 
-In order for the Proxy to talk to the Fiberplane Studio successfully it needs to be successfully authorized. This step will generate a **Proxy API Token** that will be needed later.
+In order for the Proxy to talk to the Fiberplane Studio successfully it needs to
+be successfully authorized. This step will generate a *Proxy API Token* that
+will be needed later.
 
 1. Go to your Fiberplane [Settings page](https://fiberplane.com/settings).
-2. Click **`+ New Proxy`** to register a proxy with a name that identifies the cluster you will install it into (for example, "Production"). This will generate and display a Proxy API Token that the proxy will use to authenticate with the Fiberplane Studio.
+2. Click `+ New Proxy` to register a proxy with a name that identifies the
+	 cluster you will install it into (for example, "Production"). This will
+	 generate and display a Proxy API Token that the proxy will use to
+	 authenticate with the Fiberplane Studio.
 3. Copy the Proxy API Token generated in Step 2 for the next step.
 
 ## Deploy using Docker

@@ -3,11 +3,10 @@ title: Elasticsearch
 category: 63d7e8bdbf7b4b0e0745e823
 slug: elasticsearch
 ---
-# Elasticsearch
 
 Write and run Lucene queries, and show Elasticsearch logs alongside the rest of your content.
 
-![Untitled](Elasticsearch/Untitled 1.png)
+![Untitled](Elasticsearch/elasticsearch.png)
 
 # Setup
 
@@ -43,7 +42,7 @@ By default, the query will follow the Notebook time range (configured at the top
 
 You can also set a chart-specific time range overrides by clicking the link icon at the top of the chart.
 
-![Untitled](Elasticsearch/Untitled.png)
+![Untitled](Elasticsearch/elastic-query.png)
 
 ## Expand, select, highlight, and export records
 
