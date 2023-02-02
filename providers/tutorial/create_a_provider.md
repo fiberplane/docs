@@ -142,33 +142,141 @@ you should have a fresh copy of the Fiberplane/providers repository.
 
 ### Create your new provider repo, and test sample compilation
 
-This step acts as a checkpoint. No reader should go past this point unless we held their hand through:
-- installing a complete rust + wasm toolchain
-- prepared their repo for the provider (including a .cargo/config.toml to auto-set the toolchain)
-- tested that they could compile + wasm-opt the sample provider.
+It's time to create your provider repo. To avoid the usual generic names, we
+will create a `catnip` provider.
 
-> Checkpoint: make the user produce a `username_provider.wasm` blob that is acceptable for proxy
+```console
+$ mkdir catnip_provider
+$ cd catnip_provider
+$ cp -r "${SAMPLE_PROVIDER_PATH}"/* .
+$ git init .
+```
+
+Once the repo is created, use the Cargo configuration feature to make the
+compiler default to Web Assembly compilation. Create a `.cargo` folder at the
+root of your repository, and a `config.toml` file[^profilerelease] inside:
+
+```toml
+# In .cargo/config.toml
+[build]
+target = "wasm32-unknown-unknown"
+```
+
+[^profilerelease]: You can also add a few other flags if you want. At Fiberplane
+    we add a few flags for building the providers using the least disk-space
+    possible, you can see them in our
+    [repository](https://github.com/fiberplane/providers/blob/main/providers/.cargo/config)
+    
+The last step to setup your replica of the sample provider is to own it by
+editing the `cargo.toml` file to set the name of the library:
+
+```toml
+# In Cargo.toml
+name = "catnip_provider"
+# ... Also edit the other metadata fields as you see fit.
+```
+
+
+#### Checkpoint
+
+Try to compile your provider, make sure that it's targeting web assembly and
+then optimize the given web assembly binary.
+
+```console
+## Change to the directory of your provider
+$ cargo build && wasm-opt -Oz -c -o "./username.wasm" "target/wasm32-unknown-unknown/debug/catnip_provider.wasm"
+```
+
+**Compilation Error**
+
+If you have a compilation error, and just copied the sample provider, make sure
+that you pulled the lastest version of the sample provider:
+
+```console
+cd ${SAMPLE_PROVIDER_PATH}
+git checkout main && git push
+cd /path/to/catnip_provider
+rm -rf .
+mkdir -p .cargo && cp "${SAMPLE_PROVIDER_PATH}/../.cargo/config" .cargo/config.toml
+cp -r "${SAMPLE_PROVIDER_PATH}"/* .
+```
+
+And try to compile again.
+```console
+$ cargo build
+```
+
+If it still fails, then it's an issue with our own provider development kit. Please file an issue
+to the repo with the title "Sample Provider does not compile".
+
+**Wasm optimization error**
+
+If the `wasm-opt` operation fails, it can mostly fail for 2 reasons:
+- `wasm-opt` is not in `PATH`. If so, check the setup step earlier and make sure
+  to pass the checkpoint
+- `target/wasm32-...` doesn't exist.
+  + check that the name of the library crate matches the name of the wasm you're
+    optimizing.
+  + check that you have correctly created the `.cargo/config.toml` file that
+    changes the default compilation target to `wasm32-unknown-unknown`.
 
 ### Install Fiberplane Daemon and setup the token to load the sample provider in the proxy
 
-> Checkpoint: make the user run the proxy and obtain valid log messages showing `username_provider.wasm` is loaded
+TODO
+
+> Checkpoint: make the user run the proxy and obtain valid log messages showing `catnip_provider.wasm` is loaded
 
 ### Test the Sample provider in Studio
+
+TODO
 
 > Checkpoint: make the user use the sample provider in their Studio workspace
 
 
 ## Modify the sample provider to implement _your_ integration
 
-### Remove the unused sample calls
+In the following, we use "query" to describe one type of request that is handled
+by the provider, including all the requests that make the slash commands in the
+notebook later, but also the "built-in" requests used by Studio for extra
+features such as health reporting and auto-suggestions.
+
+### Implement your configuration type
 
 ### Adding a new query
 
-- Choosing a name for the query
-- Updating the `supported_query_types` list
-- Implementing the handler for `invoke`
+Let's make a query that prompts the notebook users for a latitude/longitude, and
+return information about the closest user from
+`https://jsonplaceholder.typicode.com/` API geographically. This is a little
+convoluted, but the point is to show multiple things when creating your
+provider.
+
+Let's assume that all users from `https://jsonplaceholder.typicode.com/` are
+catnip dispensers and we want to know where to go to get our fix.
+
+#### Choosing a name for the query
+
+The query name be used in the URL to encode the request type for the provider. Let's use
+`x-closest-dispenser`. The `x-` prefix is mandatory[^whyx].
+
+[^whyx]: The `x-` prefix ensures that there will never be collisions with built-in query
+    types used by Studio, like the queries Studio uses to query the status of a provider,
+    or completion suggestions.
+
+#### Updating the `supported_query_types` list
+
+TODO
+
+#### Implementing the handler for `invoke`
+
+TODO
+
+#### Checkpoint
 
 > Checkpoint: make the user test the new command in their Studio workspace
+
+### Implementing Status query
+
+### Implementing Suggestions query
 
 ### Adding a query that returns more than just cells
 
