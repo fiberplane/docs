@@ -1,3 +1,9 @@
+---
+title: Creating a provider
+category: 63d7e8bdbf7b4b0e0745e823
+slug: creating-a-provider
+---
+
 # Create a provider
 
 This tutorial aims to help you create and modify your first provider. It will
@@ -173,9 +179,25 @@ editing the `cargo.toml` file to set the name of the library:
 ```toml
 # In Cargo.toml
 name = "catnip_provider"
-# ... Also edit the other metadata fields as you see fit.
+# ... Also edit the other metadata fields as you see fit, no `workspace` related metadata must stay in that section
 ```
 
+You will also need to update the `Cargo.toml` file to replace the "workspace"
+dependencies with proper standalone ones:
+
+```toml
+# In Cargo.toml
+
+# in [dependencies]
+fiberplane-pdk = { version = "1.0.0" }
+serde = { version = "1", features = ["derive"] }
+
+# in [build-dependencies]
+vergen = { version = "7.4.2", default-features = false, features = [
+  "build",
+  "git",
+] }
+```
 
 #### Checkpoint
 
@@ -242,7 +264,22 @@ features such as health reporting and auto-suggestions.
 
 ### Implement your configuration type
 
-### Adding a new query
+Change the configuration from the sample to use the configuration you decided on
+instead. For the `catnip_provider` the only configuration value is the base URL
+of the API (so that configuring the provider will create either a production, or
+a staging, data source for notebooks).
+
+```rust
+// Replace the SampleConfig type
+
+#[derive(ConfigSchema, Deserialize, Serialize)]
+struct CatnipConfig {
+    #[pdk(label = "API endpoint", placeholder = "Please specify a URL")]
+    pub endpoint: String,
+}
+```
+
+### Implementing a new query
 
 Let's make a query that prompts the notebook users for a latitude/longitude, and
 return information about the closest user from
@@ -253,22 +290,280 @@ provider.
 Let's assume that all users from `https://jsonplaceholder.typicode.com/` are
 catnip dispensers and we want to know where to go to get our fix.
 
+Before piping all the logic between Studio and the Provider, we will implement
+the query. This section is "vanilla Rust API development sprinkled with
+serde_json and fiberplane-provided http client", so if you are experienced you
+might want to read the section quickly/skip it.
+
+#### Making an internal Data Model
+
+First, we need to add `serde_json` as a dependency as we will be working with a JSON API
+
+```toml
+# In Cargo.toml
+[dependencies]
+serde_json = "1"
+serde_aux = "4.1" // serde_aux provides helpers for JSON deserialization
+```
+
+Then we add the data types that match the API entries we want to work with, and build a data-model that's relevant for the query
+
+```rust
+use serde_aux::deserialize_number_from_string;
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+struct User {
+    id: usize,
+    name: String,
+    username: String,
+    email: String,
+    address: Address,
+    phone: String,
+    webside: String,
+    company: Company
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+struct Address {
+    street: String,
+    suite: String,
+    city: String,
+    zipcode: String,
+    #[serde(rename = "geo")]
+    geocode: GeoLocation
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, Copy)]
+struct GeoLocation {
+    #[serde(deserialize_with = "deserialize_number_from_string", rename = "lat")]
+    latitude: f64,
+    #[serde(deserialize_with = "deserialize_number_from_string", rename = "lon")]
+    longitude: f64
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(rename_all = camelCase)]
+struct Company {
+    name: String,
+    catch_phrase: String,
+    bs: String
+}
+
+#[test]
+fn test_deserialization() {
+let sample = r#"
+{
+    "id": 1,
+    "name": "Leanne Graham",
+    "username": "Bret",
+    "email": "Sincere@april.biz",
+    "address": {
+      "street": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "zipcode": "92998-3874",
+      "geo": {
+        "lat": "-37.3159",
+        "lng": "81.1496"
+      }
+    },
+    "phone": "1-770-736-8031 x56442",
+    "website": "hildegard.org",
+    "company": {
+      "name": "Romaguera-Crona",
+      "catchPhrase": "Multi-layered client-server neural-net",
+      "bs": "harness real-time e-markets"
+    }
+  }"#;
+  
+  let _ = serde_json::from_str::<User>(sample).unwrap();
+}
+```
+
+With this data model, we can create a function that will return the closest user from a location
+
+```rust
+fn distance_between(origin: &GeoLocation, destination: &GeoLocation) -> f64 {
+    ((destination.longitude - origin.longitude).powi(2) + (destination.latitude - origin.latitude).powi(2)).sqrt()
+}
+
+fn closest_user(target: GeoLocation, users: &[User]) -> Option<(f64, User)> {
+    users
+        .iter()
+        .map(|user| (distance_between(user.geocode, &target), user.clone()))
+        .min_by(|(distance_l, _), (distance_r, _)| distance_l.cmp(distance_r))
+}
+```
+
+Now we have all the internal logic from the provider to compute the relevant
+data. We still need to fetch the users from the API.
+
+#### Using Provider Bindings to implement behaviour
+
+We cannot use an API client crate such as `reqwest` in providers[^wasmhost],
+that is where we must use the provided methods from the provider bindings to
+make the call. The function below is using the provided bindings to make a
+query to the JSON placeholder API returning the list of users.
+
+The pattern here is:
+- build a `fiberplane_pdk::prelude::HttpRequest` structure
+- call the `fiberplane_pdk::prelude::make_http_request` binding that will
+  arrange for the runtime to make the call. This is the "reqwest" call
+  equivalent in Fiberplane bindings
+- extract all the relevant data from `fiberplane_pdk::prelude::HttpResponse`.
+
+With proper error management, it is possible to return a `Result<Vec<User>>`
+instead of trying to return a `Vec<User>` and panicking[^providerpanics] (panics crash the provider).
+
+```rust
+async fn fetch_users(config: &CatnipConfig) -> Result<Vec<User>> {
+    let base_url: Url = config
+        .endpoint
+        .parse()
+        .map_err( |e| Error::Config { message: format!("Invalid URL in configuration: {e:?}") })?;
+    let url = base_url
+        .join("/users")
+        .map_err( |e| Error::Config { message: format!("Invalid URL in configuration: {e:?}") })?;
+
+    let request = HttpRequest {
+        url,
+        headers: None,
+        method: HttpRequestMethod::Get,
+        body: None,
+    };
+    let response = make_http_request(request).await?;
+    
+    serde_json::from_slice(&response.body).map_err(|e| Error::Deserialization { message: format!("Could not deserialize payload: {e:?}") })
+}
+```
+
+[^wasmhost]: In the WebAssembly computation model, the host runtime is responsible for
+    managing the connection and OS resources to make the HTTP queries
+
+[^providerpanics]: Provider panics make the provider crash. The concurrent queries being
+    handled might also fail, and Studio won't be able to do clean error reporting if
+    the provider just crashes instead of giving back a meaningful error message!
+    
+We now have all the building blocks to implement our query:
+
+```rust
+async fn fetch_closest_user(config: &CatnipConfig, target: GeoLocation) -> Result<Option<(f64, User)>> {
+    let users = fetch_users(config).await?;
+    Ok(closest_user(target, &users).cloned())
+}
+```
+    
+### Adding a new query
+
+In the previous chapter, we implemented all the internal provider logic for the query we want to
+add to notebooks. The missing part is how to connect this logic to a notebook:
+
+- how to obtain the `CatnipConfig`, `(latitude, longitude)` from the users through Studio? 
+- how to return meaningful values to Studio so that it shows the data in notebook cells?
+
 #### Choosing a name for the query
 
 The query name be used in the URL to encode the request type for the provider. Let's use
 `x-closest-dispenser`. The `x-` prefix is mandatory[^whyx].
 
+```rust
+// Add a new constant in the library
+
+pub const CLOSEST_DISPENSER_QUERY: &str = "x-closest-dispenser";
+```
+
 [^whyx]: The `x-` prefix ensures that there will never be collisions with built-in query
     types used by Studio, like the queries Studio uses to query the status of a provider,
     or completion suggestions.
+    
+    
+#### Adding a query data model
+
+The `QuerySchema` macro deals with creating a structure that will show matching
+input fields in Studio. We create a `CatnipClosestQuery` structure that will
+prompt the user for a latitude and a longitude when Studio expands a slash
+command for this query:
+
+```rust
+#[derive(QuerySchema, Deserialize, Serialize, Debug, Clone)]
+struct CatnipClosestQuery {
+    #[pdk(label = "Latitude (must be a floating point number)", placeholder = "52.3740300")]
+    pub latitude: String,
+
+    #[pdk(label = "Longitude (must be a floating point number)", placeholder = "4.8896900")]
+    pub longitude: DateTimeRange,
+}
+```
+
+#### Implementing the handler when the provider is `invoke`d
+
+The query data model, and the configuration data model, are the 2 things that
+are needed to implement our handler for the query. For the time being we are
+making the simplest handlers, that always return the same MIME type:
+`CELLS_MIME_TYPE`, which is a builtin MIME type natively handled by Studio. As
+long as we return a `fiberplane_pdk::prelude::Cells` that is transformed to a
+`Blob` we won't need to implement anything else in the provider protocol[^actually].
+
+[^actually]: This is not entirely true: Log cells and Graph cells need extra code to
+    appear properly, but this is an advanced topic for another piece.
+    
+
+```rust
+async fn find_closest_dispenser(query_data: CatnipClosestQuery, config: CatnipConfig) -> Result<Blob> {
+    let response = fetch_closest_user(&config, GeoLocation { latitude: query_data.latitude, longitude: query_data.longitude }).await?;
+    let cells = match response {
+        None => {
+            vec![Cell::Text(TextCell {
+                id: "result".to_owned(),
+                content: "No dispenser was found!".to_string(),
+                formatting: Formatting::default(),
+                read_only: None,
+            })]
+        },
+        Ok((distance, dispenser)) => {
+            vec![Cell::Text(TextCell {
+                id: "result".to_owned(),
+                content: format!("The closest dispenser to you ({query_data.latitude}, {query_data.longitude}) is\n{} ({})\n\t{} {}\n\t{} {}",
+                    dispenser.name,
+                    distance,
+                    dispenser.address.street,
+                    dispenser.address.suite,
+                    dispenser.address.city,
+                    dispenser.address.zipcode
+                ),
+                formatting: Formatting::default(),
+                read_only: None,
+            })]
+        
+        }
+    };
+
+    Cells(cells).to_blob()
+}
+```
 
 #### Updating the `supported_query_types` list
 
-TODO
+In order to get your query to appear and be usable from Studio, the provider
+needs to advertise it. It is done thanks to the `pdk_query_types!` macro, by
+adding an extra query, associating the name with the data model and a handler
+function.
 
-#### Implementing the handler for `invoke`
-
-TODO
+```rust
+// Remove all existing queries except the Status one, so the pdk_query_types! macro
+// becomes
+pdk_query_types! {
+    CLOSEST_DISPENSER_QUERY => {
+        label: "Catnip: find closest dispenser",
+        handler: find_closest_dispenser(CatnipClosestQuery, CatnipConfig),
+        supported_mime_types: [CELLS_MIME_TYPE]
+    },
+    STATUS_QUERY_TYPE => {
+        handler: check_status(),
+        supported_mime_types: [STATUS_MIME_TYPE]
+    }
+}
+```
 
 #### Checkpoint
 
@@ -276,9 +571,32 @@ TODO
 
 ### Implementing Status query
 
+Advanced page
+
 ### Implementing Suggestions query
 
+Advanced page
+
 ### Adding a query that returns more than just cells
+
+#### For an _advanced_ tutorial later
+On top of choosing the name, we will also choose the inner data model of
+"Closest Dispenser" response. Here the goal is to choose a structure that is
+easy to manipulate in Rust; we will be using this structure as the basis to
+create cells in a notebook.
+
+```rust
+pub const CATNIP_CLOSEST_MIME_TYPE: &str = "application/vnd.fiberplane.providers.catnip.closest";
+
+// We are using the `ProviderData` helper macro to do the heavy work
+#[derive(Deserialize, ProviderData, Serialize, Debug, Clone)]
+#[pdk(mime_type = CATNIP_CLOSEST_MIME_TYPE)]
+struct ClosestDispenserData {
+    target: GeoLocation,
+    distance: Option<f64>,
+    user: Option<User>
+}
+```
 
 - Implementing the handler for `create_cells`
 - Implementing the handler for `extract_data`

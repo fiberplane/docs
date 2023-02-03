@@ -1,3 +1,9 @@
+---
+title: Provider Protocol Reference
+category: 63d7e8bdbf7b4b0e0745e823
+slug: provider-protocol-reference
+---
+
 # Provider Protocol Reference (v2)
 
 All functions decribed here take msgpack-serialized payloads as arguments and
