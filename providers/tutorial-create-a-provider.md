@@ -1,7 +1,7 @@
 ---
-title: Creating a provider
+title: (Tutorial) Create a provider
 category: 63d7e8bdbf7b4b0e0745e823
-slug: creating-a-provider
+slug: tutorial-create-a-provider
 ---
 
 # Create a provider
@@ -383,14 +383,14 @@ let sample = r#"
 With this data model, we can create a function that will return the closest user from a location
 
 ```rust
-fn distance_between(origin: &GeoLocation, destination: &GeoLocation) -> f64 {
+fn distance_between(origin: GeoLocation, destination: GeoLocation) -> f64 {
     ((destination.longitude - origin.longitude).powi(2) + (destination.latitude - origin.latitude).powi(2)).sqrt()
 }
 
 fn closest_user(target: GeoLocation, users: &[User]) -> Option<(f64, User)> {
     users
         .iter()
-        .map(|user| (distance_between(user.geocode, &target), user.clone()))
+        .map(|user| (distance_between(user.geocode, target), user.clone()))
         .min_by(|(distance_l, _), (distance_r, _)| distance_l.cmp(distance_r))
 }
 ```
@@ -416,6 +416,7 @@ With proper error management, it is possible to return a `Result<Vec<User>>`
 instead of trying to return a `Vec<User>` and panicking[^providerpanics] (panics crash the provider).
 
 ```rust
+// The Result here is a `fiberplane_pdk::prelude::Result`
 async fn fetch_users(config: &CatnipConfig) -> Result<Vec<User>> {
     let base_url: Url = config
         .endpoint
@@ -473,7 +474,7 @@ pub const CLOSEST_DISPENSER_QUERY: &str = "x-closest-dispenser";
 ```
 
 [^whyx]: The `x-` prefix ensures that there will never be collisions with built-in query
-    types used by Studio, like the queries Studio uses to query the status of a provider,
+    types used by Studio, like the queries used to query the status of a provider,
     or completion suggestions.
     
     
@@ -491,7 +492,7 @@ struct CatnipClosestQuery {
     pub latitude: String,
 
     #[pdk(label = "Longitude (must be a floating point number)", placeholder = "4.8896900")]
-    pub longitude: DateTimeRange,
+    pub longitude: String,
 }
 ```
 

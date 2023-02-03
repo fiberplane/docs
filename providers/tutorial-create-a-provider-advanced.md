@@ -1,7 +1,7 @@
 ---
-title: Creating a provider
+title: Create a provider -- Advanced topics
 category: 63d7e8bdbf7b4b0e0745e823
-slug: creating-a-provider-advanced
+slug: tutorial-create-a-provider-advanced
 ---
 
 # Create a provider (advanced topics)

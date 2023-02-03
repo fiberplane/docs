@@ -1,7 +1,7 @@
 ---
 title: Provider Protocol Explanation
 category: 63d7e8bdbf7b4b0e0745e823
-slug: provider-protocol-explanation
+slug: provider-protocol
 ---
 
 # Provider Protocol Flow
