@@ -567,7 +567,15 @@ pdk_query_types! {
 
 #### Checkpoint
 
-> Checkpoint: make the user test the new command in their Studio workspace
+You should be able to run the query from Studio now! To test it
+
+- Open `studio.fiberplane.com` and switch to your personal workspace
+- Add the data source for `catnip_provider` from the proxy to your workspace.
+- Create a new notebook in your workspace
+- Try typing `/catnip` in a cell, and select your `Catnip: find closest dispenser` action
+- Fill the latitude and longitude, and run the query
+
+The results should appear in a new cell in the notebook!
 
 ### Implementing Status query
 
