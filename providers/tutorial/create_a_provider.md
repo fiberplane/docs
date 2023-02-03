@@ -303,7 +303,7 @@ First, we need to add `serde_json` as a dependency as we will be working with a 
 # In Cargo.toml
 [dependencies]
 serde_json = "1"
-serde_aux = "4.1" // serde_aux provides helpers for JSON deserialization
+serde_aux = "4.1" # serde_aux provides helpers for JSON deserialization
 ```
 
 Then we add the data types that match the API entries we want to work with, and build a data-model that's relevant for the query
@@ -577,34 +577,6 @@ You should be able to run the query from Studio now! To test it
 
 The results should appear in a new cell in the notebook!
 
-### Implementing Status query
+## Conclusion
 
-Advanced page
-
-### Implementing Suggestions query
-
-Advanced page
-
-### Adding a query that returns more than just cells
-
-#### For an _advanced_ tutorial later
-On top of choosing the name, we will also choose the inner data model of
-"Closest Dispenser" response. Here the goal is to choose a structure that is
-easy to manipulate in Rust; we will be using this structure as the basis to
-create cells in a notebook.
-
-```rust
-pub const CATNIP_CLOSEST_MIME_TYPE: &str = "application/vnd.fiberplane.providers.catnip.closest";
-
-// We are using the `ProviderData` helper macro to do the heavy work
-#[derive(Deserialize, ProviderData, Serialize, Debug, Clone)]
-#[pdk(mime_type = CATNIP_CLOSEST_MIME_TYPE)]
-struct ClosestDispenserData {
-    target: GeoLocation,
-    distance: Option<f64>,
-    user: Option<User>
-}
-```
-
-- Implementing the handler for `create_cells`
-- Implementing the handler for `extract_data`
+Words, and link to [advanced page](doc:creating-a-provider-advanced)
