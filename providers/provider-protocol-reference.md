@@ -1,15 +1,14 @@
 ---
 title: Provider Protocol Reference
-category: 63d7e8bdbf7b4b0e0745e823
+category: 63e0c7cf7166bf006d3b4117
 slug: provider-protocol-reference
 ---
 
 # Provider Protocol Reference (v2)
 
-All functions decribed here take msgpack-serialized payloads as arguments and
-return values. The key/values to use for these payloads are exactly the ones you
-can find in `fiberplane::models` crate documentation (NOTE: put the docs.rs link
-once fiberplane is open-sourced and published).
+All functions described here are bindings generated with fp-bindgen.
+The key/values to use for these payloads are exactly the ones you
+can find in `fiberplane::models` [crate documentation](https://docs.rs/fiberplane-models/latest/fiberplane-models)
 
 ## Imported functions
 
@@ -29,9 +28,9 @@ should you want to inspect the source.
 pub async fn make_http_request(request: HttpRequest) -> Result<HttpResponse, HttpRequestError>;
 ```
 
-#### Purpose
+#### Description
 
-This is the most useful imported method, it allows the providers to make HTTP queries to
+This is the most useful imported function, it allows the providers to make HTTP queries to
 remote hosts through the hosting runtime. A basic example of its usage can be seen in the
 tutorial to create a provider:
 
@@ -49,7 +48,7 @@ tutorial to create a provider:
     };
 
     let response = make_http_request(request).await?;
-    
+
     serde_json::from_slice(&response.body).map_err(|e| Error::Deserialization { message: format!("Could not deserialize payload: {e:?}") })
 ```
 
@@ -61,11 +60,16 @@ tutorial to create a provider:
 pub fn log(message: String);
 ```
 
-#### Purpose
+#### Description
 
 This function asks the hosting runtime to log a message. This will make your log
 messages appear in Studio or in the standard output of the Fiberplane Daemon
-instance.
+instance. Its usage is often as simple as:
+
+```rust
+    let location = GeoLocation { latitude: 50.1234, longitude: 4.12084837 };
+    log(format!("Catnip: looking for the closest dispenser to {location:?} now..."));
+```
 
 ### `random`
 
@@ -75,14 +79,37 @@ instance.
 pub fn random(len: u32) -> Vec<u8>;
 ```
 
-#### Purpose
+#### Description
 
 Query the hosting runtime for a source of randomness. Note that there is no
 guarantee that the random values you obtain this way to be cryptographically
 secure: it is entirely dependent on the runtime implementation. You can see the
 implementation of randomness for Fiberplane Daemon in the [Provider Runtime
 crate](https://github.com/fiberplane/fiberplane-rs/blob/6679fbd0f1cbdac7c57422ae699e12bb35bed71b/fiberplane-provider-protocol/fiberplane-provider-runtime/src/spec/mod.rs#L116)
-source code
+source code.
+
+For example, you could create a
+[getrandom](https://docs.rs/getrandom/latest/getrandom/macro.register_custom_getrandom.html#writing-a-custom-getrandom-implementation) provider using it
+
+```rust
+// In a helper crate like getrandom_fp_provider
+use getrandom::Error;
+
+pub fn use_fp_bindings(buf: &mut [u8]) -> Result<(), Error> {
+    let vals = random(buf.len());
+    buf.copy_from_slice(&vals);
+    Ok(())
+}
+
+// In your provider crate
+use getrandom_fp_provider::use_fp_bindings;
+use getrandom::register_custom_getrandom;
+
+register_custom_getrandom!(use_fp_bindings);
+```
+
+> Note: this example snippet might prove generic and useful enough to be upstreamed
+  by Fiberplane and available as a public helper crate. Stay tuned!
 
 ### `now`
 
@@ -92,19 +119,24 @@ source code
 pub fn now() -> Timestamp;
 ```
 
-#### Purpose
+#### Description
 
 Returns a timestamp of the current time of execution. The usefulness of this
 timestamp comes from what you want to do with timers, or signature
 creation/verification schemes.
 
-
 ## Exported functions
 
-It is usually safer to use the Plugin Development Kit macros to let the compiler
-generate correct implementations of these functions
+Exported functions are functions that your provider implements, and that the
+runtime will call. In order to make those exported functions usable in Fiberplane,
+they must be annotated with `#[pdk_export]`.
 
 ### `get_supported_query_types`
+
+It is usually safer to use the Plugin Development Kit macros to let the compiler
+generate correct implementations of these functions. A correct `pdk_query_types!`
+invocation will generate this function for you. See the
+[tutorial](doc:create-a-provider) for more information about using the PDK
 
 #### Signature
 
@@ -112,7 +144,7 @@ generate correct implementations of these functions
 pub async fn get_supported_query_types(config: ProviderConfig) -> Vec<SupportedQueryType>;
 ```
 
-#### Purpose
+#### Description
 
 Returns the query types supported by this provider.
 This function allows Studio to know upfront which formats will be
@@ -121,13 +153,18 @@ be selected for certain use cases.
 
 ### `invoke2`
 
+It is usually safer to use the Plugin Development Kit macros to let the compiler
+generate correct implementations of these functions. A correct `pdk_query_types!`
+invocation will generate this function for you. See the
+[tutorial](doc:create-a-provider) for more information about using the PDK
+
 #### Signature
 
 ```rust
-pub async fn invoke2(request: ProviderRequest) -> Result<Blob, Error>;
+pub async fn invoke2(request: ProviderRequest) -> Result<Blob>;
 ```
 
-#### Purpose
+#### Description
 
 Invokes the provider to perform a data request.
 
@@ -136,17 +173,19 @@ Invokes the provider to perform a data request.
 #### Signature
 
 ```rust
-pub fn create_cells(query_type: String, response: Blob) -> Result<Vec<Cell>, Error>;
+pub fn create_cells(query_type: String, response: Blob) -> Result<Vec<Cell>>;
 ```
 
-#### Purpose
+#### Description
 
-Creates output cells based on the response.
+Creates output cells based on the response (a `Blob` that the provider
+previously sent to answer an `invoke2` call).
 Studio would typically embed the created cells in the provider cell,
 but other actions could be desired.
 
-When any created cells use a `data` field with the value
-`cell-data:<mime-type>,self`, Studio will replace the value `self` with
+When any created cells use a `data-links` field with the value
+`cell-data:<mime-type>,self` (such as Log cells or Graph cells),
+Studio will replace the value `self` with
 the ID of the cell for which the query was invoked. This allows the
 provider to create cells that reference its own data without knowing the
 context of the cell in which it was executed.
@@ -154,17 +193,18 @@ context of the cell in which it was executed.
 Note: When the MIME type in the provider response is
 `application/vnd.fiberplane.cells` (suffixed with either `+json` or
 `+msgpack`), Studio will elide the call to `create_cells()` and simply
-parse the data directly to a `Vec<Cell>`.
+parse the data directly to a `Vec<Cell>`. This is what makes
+`create_cells`'s implementation optional.
 
 ### `extract_data` (Optional)
 
 #### Signature
 
 ```rust
-pub fn extract_data(response: Blob, mime_type: String, query: Option<String>) -> Result<Blob, Error>;
+pub fn extract_data(response: Blob, mime_type: String, query: Option<String>) -> Result<Blob>;
 ```
 
-#### Purpose
+#### Description
 
 Takes the response data, and returns it in the given MIME type,
 optionally passing an additional query string to customize extraction
@@ -188,7 +228,7 @@ should not change the outcome.
 pub fn get_config_schema() -> ConfigSchema;
 ```
 
-#### Purpose
+#### Description
 
 Returns the schema for the config consumed by this provider.
 
@@ -199,4 +239,5 @@ Assuming the provider uses Serde for parsing the config, validation is
 done at that stage.
 
 This function only needs to be implemented by providers that are
-statically bundled with Studio.
+statically bundled with Studio. You should never have to implement it,
+it is mentioned here for the sake of completeness.

@@ -88,13 +88,30 @@ $ which wasm-opt
 
 ### Find the documentation of the external resource
 
-For this tutorial we will integrate TBD with Fiberplane. Therefore we need to
+For this tutorial we will integrate the [placeholder API](https://jsonplaceholder.typicode.com/)
+with Fiberplane. Therefore we need to
 find the relevant documentation for it, and decide on the necessary
 configuration values we want to have in the provider.
 
 #### Deciding on the features we can have and want to have
 
+We'll assume that this API is actually a catnip dispenser API, so we want to know which
+`User` entity is the closest to a given location given as `(latitude, longitude)` pair.
+
+Each small scenario like that will make a _query_ in the provider.
+
 #### Deciding on configuration schema for the provider
+
+Since this API can be hosted on different locations, we want to have the endpoint of the API as
+a configuration value for the provider. That means we only need to set this URL once, and no
+user will have to worry about it again.
+
+Good candidates for provider configuration values are like this:
+- Little or no purpose to be changed on a call-by-call basis, but
+- Still necessary for the provider to function correctly
+
+By that criterion, authentication values are very good configuration values. Our API does not
+handle authentication though, so we won't need it here.
 
 #### Testing a SDK for serverless WebAssembly compilation
 
