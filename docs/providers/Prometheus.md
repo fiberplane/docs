@@ -7,7 +7,7 @@ slug: prometheus
 Write and run PromQL queries, and display Prometheus charts and tables alongside
 the rest of your content.
 
-![og-image_Best practices for observability (14).png](Prometheus/prometheus.png)
+![Prometheus](providers/Prometheus/prometheus.png)
 
 # Setup
 
@@ -48,8 +48,7 @@ The `data_sources.yaml` format for adding a Prometheus Provider looks like this:
 
 ## Graph controls
 
-![og-image_Best practices for observability
-(16).png](Prometheus/prometheus-query.png)
+![Prometheus query](providers/Prometheus/prometheus-query.png)
 
 Fiberplane Notebook offers several options to help visualize your metrics data.
 You can choose between bar and line charts as well as select different stacking

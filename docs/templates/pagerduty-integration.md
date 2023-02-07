@@ -34,7 +34,7 @@ If you need help with this integration, please contact ***[support@fiberplane.co
 2. Follow the instructions to create a template and trigger using the CLI.
 3. Note the **Trigger URL** for later use.
     
-![Creating a template in Fiberplane](pagerduty-integration/1-creating-template.png)
+![Creating a template in Fiberplane](templates/pagerduty-integration/1-creating-template.png)
     
 
 ### In the AWS console
@@ -54,7 +54,7 @@ If you need help with this integration, please contact ***[support@fiberplane.co
 3. Press **Deploy.**
 4. Copy the **Function URL** in the **Function Overview** section.
 
-![Copy the function URL in AWS Console](pagerduty-integration/3-copy-function-url.png)
+![Copy the function URL in AWS Console](templates/pagerduty-integration/3-copy-function-url.png)
 
 ### In PagerDuty
 
@@ -70,23 +70,23 @@ If you need help with this integration, please contact ***[support@fiberplane.co
 10. Type **pd-apikey** in the **name** field and add your PagerDuty API key in the **value** field.
 11. Click **Add Webhook** and then **OK**
 
-![Untitled](pagerduty-integration/4-create-pagerduty-webhook.png)
+![Untitled](templates/pagerduty-integration/4-create-pagerduty-webhook.png)
 
-![Untitled](pagerduty-integration/5-webhook-headers.png)
+![Untitled](templates/pagerduty-integration/5-webhook-headers.png)
 
 ## Testing the integration
 
-1. Go to the I**ncidents** screen in PagerDuty and click **+ New Incident**
+1. Go to the **Incidents** screen in PagerDuty and click **+ New Incident**
 2. Select an **Impacted Service** and add a **Title** to the incident and optionally select an **Urgency, Incident Priority** and **Description.**
 3. Click **Create Incident** 
 4. Click **! Acknowledge**
 5. Check that the notebook URL is updated in the incident notes:
 
-![Untitled](pagerduty-integration/6-test-pagerduty-webhook.png)
+![Untitled](templates/pagerduty-integration/6-test-pagerduty-webhook.png)
 
 1. Click on the URL and ensure that it takes you through to the notebook and the notebook is correctly filled out with the data:
 
-![Untitled](pagerduty-integration/7-test-fiberplane-notebook.png)
+![Untitled](templates/pagerduty-integration/7-test-fiberplane-notebook.png)
 
 ## How to Uninstall
 

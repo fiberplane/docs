@@ -12,8 +12,7 @@ users). You can also go right away to your notebook by typing
 [fp.new](https://fp.new/) in your URL, however, to save and store your notebook,
 you will need to log in.
 
-![Proxy
-slide](https://github.com/fiberplane/docs/blob/readme/proxy_slide.png?raw=true)
+![Proxy slide](proxy_slide.png)
 
 ## How Fiberplane works
 
@@ -47,8 +46,7 @@ You can do it in the Settings > Proxies menu or using our CLI tool.
 
 ## Generate a Proxy API Token in the Studio
 
-![og-image_Best practices for observability
-(17).png](Quickstart%20cce7b6fa53144989b6835feb900e32dc/og-image_Best_practices_for_observability_(17).png)
+![Register a proxy](quickstart/register_a_proxy.png)
 
 In order for the Proxy to talk to the Fiberplane Studio successfully it needs to
 be successfully authorized. This step will generate a **Proxy API Token** that
