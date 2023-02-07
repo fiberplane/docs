@@ -14,16 +14,20 @@ jobs:
 
       - name: Find and replace all image links
         run: |
-          find . -type f \( -iname "*.md" ! -iname "README.md" \) -exec sed -i "s_\(^!\[.*\](\)_\1https://github.com/fiberplane/docs/raw/main/_" {} +
+          find . -type f \( -iname "*.md" ! -iname "README.md" \) -exec sed -i "s_\(^!\[.*\](\)_\1https://github.com/fiberplane/docs/raw/main/docs/_" {} +
 
       - name: Sync docs to readme (dry run)
         uses: readmeio/rdme@v8
+        env:
+          RDME_API_KEY: ${{ secrets.README_API_KEY }}
         with:
-          rdme: docs . --dryRun
+          rdme: docs docs/ --dryRun
 
 
       - name: Sync docs to readme
         uses: readmeio/rdme@v8
+        env:
+          RDME_API_KEY: ${{ secrets.README_API_KEY }}
         with:
-          rdme: docs .
+          rdme: docs docs/
 
