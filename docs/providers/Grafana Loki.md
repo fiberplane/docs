@@ -47,7 +47,7 @@ automatically.
 You can also set a chart-specific time range overrides by clicking the link icon
 at the top of the chart.
 
-![Untitled](Elasticsearch/elastic-query.png)
+![Grafana Loki](providers/Elasticsearch/elastic-query.png)
 
 ## Expand, select, highlight, and export records
 

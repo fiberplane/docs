@@ -12,8 +12,7 @@ slug: run-local
 
 ## Generate a Proxy API Token in the Studio
 
-![og-image_Best practices for observability
-(17).png](og-image_Best_practices_for_observability_(17).png)
+![Register a proxy](quickstart/register_a_proxy.png)
 
 In order for the Proxy to talk to the Fiberplane Studio successfully it needs to
 be successfully authorized. This step will generate a *Proxy API Token* that
@@ -54,4 +53,4 @@ docker run \
 
 Once you complete your Proxy setup, your data sources linked in the Proxy configuration should be recognized by the Studio - you can verify this again by going to the **Settings > Data Sources** screen.👇
 
-![Untitled](Deploy to Kubernetes/Untitled.png)
+![Untitled](deploy-to-kubernetes/Untitled.png)
