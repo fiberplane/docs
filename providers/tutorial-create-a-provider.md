@@ -216,6 +216,16 @@ vergen = { version = "7.4.2", default-features = false, features = [
 ] }
 ```
 
+Finally, ignore all `.wasm` files from the repository, to avoid accidentally pushing
+the providers you will build:
+
+```gitignore
+# In .gitignore, add a line
+*.wasm
+```
+
+> Important Note: from now on, you only stay in the directory of your provider repository.
+
 #### Checkpoint
 
 Try to compile your provider, make sure that it's targeting web assembly and
@@ -223,7 +233,7 @@ then optimize the given web assembly binary.
 
 ```console
 ## Change to the directory of your provider
-$ cargo build && wasm-opt -Oz -c -o "./username.wasm" "target/wasm32-unknown-unknown/debug/catnip_provider.wasm"
+$ cargo build && wasm-opt -Oz -c -o "./catnip.wasm" "target/wasm32-unknown-unknown/debug/catnip_provider.wasm"
 ```
 
 **Compilation Error**
@@ -261,16 +271,113 @@ If the `wasm-opt` operation fails, it can mostly fail for 2 reasons:
 
 ### Install Fiberplane Daemon and setup the token to load the sample provider in the proxy
 
-TODO
+#### Install the Daemon
+Install [Fiberplane Daemon](https://github.com/fiberplane/proxy) using cargo:
 
-> Checkpoint: make the user run the proxy and obtain valid log messages showing `catnip_provider.wasm` is loaded
+```console
+cargo install --locked fpd
+```
 
-### Test the Sample provider in Studio
+#### Create a token for the proxy in your personal workspace
 
-TODO
+Go to [Fiberplane Studio](https://studio.fiberplane.com), make sure you are
+currently in your personal workspace in the top left corner after logging in.
 
-> Checkpoint: make the user use the sample provider in their Studio workspace
+Click the Settings cogs in the bottom left corner of the screen, and go to
+the "Proxies" category.
 
+There, you will be able to create a new "Proxy", which needs a name
+(For example `tutorial`), and then you will get a token. **Do not lose it**!!
+
+This token is a mandatory argument to run the Daemon on your machine, so that
+it can connect to Fiberplane Studio. A good way to save it is to put it in
+your environment, as the Daemon will look into the environment for the token
+if not provided in the command line:
+
+```console
+$ export TOKEN="<token content>"
+```
+
+> **Note**: This is probably a good reason to rename the environment variable
+for the token right? Something like `FPD_TOKEN`. Either case, for now it's
+`TOKEN`
+
+#### Add a `data_sources.yaml` file to configure the provider
+
+You can use `fpd` to edit and create a sample `data_sources.yaml` file to
+use your provider, in the current directory[^canonical]:
+
+[^canonical]: Fiberplane Daemon is configured to look for the data_sources configuration
+    in the current working directory, and then in a canonical absolute path, if the
+    command-line flag is absent. For the tutorial we will just use the current directory,
+    but the recommended absolute location is the path returned by `fpd config paths data-sources`
+
+```console
+$ touch data_sources.yaml
+```
+
+In the `data_sources.yaml` file you are now editing, add this content:
+```yaml
+- name: tutorial-provider
+  description: Tutorial provider
+  providerType: catnip
+  config:
+    endpoint: https://jsonplaceholder.typicode.com
+    accept: true
+    numRetries: 1
+```
+
+
+#### Checkpoint
+
+Run the daemon on your machine, and make sure that it doesn't error out, or
+output error logs about catnip not being loaded:
+
+```sh
+# Either use the `--token` flag, or the `TOKEN` environment variable
+RUST_LOG=error fpd --token <TOKEN> --wasm-dir . | grep -i "catnip"
+```
+
+Wait 10 seconds: if the app didn't quit on its own, and no log appeared, you're all set!
+
+You can quit (using `Control + C`), and restart without the extra filters in a
+background process:
+```sh
+fpd --token <TOKEN> --wasm-dir .
+```
+
+### Checkpoint: test the Sample provider in Studio
+
+With your Daemon running and connected to Studio, you can immediately test if
+"side loading" the provider worked:
+
+**Is the `tutorial` proxy active?**
+
+Go to your Proxy settings page: make sure that the proxy you created is present
+in the list, and reported as "online". If it does not report as "online" even
+after 5 minutes, make sure that you copied the token correctly, and that
+the `fpd` instance you ran before is still up and runs without errors.
+
+**Is the "Catnip" data source available?**
+
+Create a new, empty notebook in your workspace, and click the data sources icon in the
+top right corner. There should be an entry in the `Catnip` category, called
+`tutorial-provider`. Make sure it's there and active.
+
+**Is the slash Command present?**
+
+Go in a cell of the notebook, and hit `/`. The menu should appear, and now you
+can start typing `showcase`. You should see the 2 `Showcase` commands appear
+in the menu.
+
+**Is the Daemon communicating fine?**
+
+Accept any of the "Showcase" command, input some text in the fields, and try to
+run the Cell.
+
+If you obtain a result in the notebook, congratulations! You've successfully side-loaded
+a Web Assembly plugin to your Fiberplane workspace! This is (_was_) the hardest part of the
+tutorial.
 
 ## Modify the sample provider to implement _your_ integration
 
