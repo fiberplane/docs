@@ -12,8 +12,8 @@ you integrate a third-party resource so that any output from it can be added to
 a notebook with only a `/` command (we call those "slash commands").
 
 This tutorial focuses on writing the provider in Rust, to be able to use the
-convenience macros from Fiberplane Plugin Development Kit (PDK). Writing
-providers in different languages will be addressed in a different guide.
+convenience macros from Fiberplane Plugin Development Kit (PDK).
+Provider Development Kits for other languages are coming later.
 
 ## Prepare the relevant resources
 
