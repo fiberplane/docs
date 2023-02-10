@@ -379,9 +379,6 @@ Create a new, empty notebook in your workspace, and click the data sources icon 
 top right corner. There should be an entry in the `Catnip` category, called
 `tutorial-provider`. Make sure it's there and active.
 
-In the following screenshot, the category is `Sample`, it should be `Catnip` for
-you:
-
 ![The list of data sources in the notebook](Tutorial/5_Data_sources_in_notebook.png)
 
 **Is the slash Command present?**
