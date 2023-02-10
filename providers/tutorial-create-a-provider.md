@@ -295,8 +295,8 @@ the "Proxies" category.
 There, you will be able to create a new "Proxy", which needs a name
 (For example `tutorial-proxy`), and then you will get a token. **Do not lose it**!!
 
-
 ![The Proxy management page](Tutorial/2 Add new proxy page.png)
+
 ![Choosing a name for the new proxy](Tutorial/3 Fill proxy name.png)
 
 This token is a mandatory argument to run the Daemon on your machine, so that
@@ -743,10 +743,12 @@ You should be able to run the query from Studio now! To test it
 - Add the data source for `catnip` from the proxy to your workspace.
 - Create a new notebook in your workspace
 - Try typing `/catnip` in a cell, and select your `Catnip: find closest dispenser` action
+
 ![The slash command menu has catnip entries now](Tutorial/8 Catnip Slash Command.png)
 - Fill the latitude and longitude, and run the query
 
 The results should appear in a new cell in the notebook!
+
 ![The provider cell in the notebook has results](Tutorial/9 Catnip cell called.png)
 
 ## Conclusion
