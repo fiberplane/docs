@@ -15,6 +15,9 @@ This tutorial focuses on writing the provider in Rust, to be able to use the
 convenience macros from Fiberplane Plugin Development Kit (PDK).
 Provider Development Kits for other languages are coming later.
 
+All the code for the provider created through this tutorial is available
+on [Github](https://github.com/fiberplane/catnip-provider)
+
 ## Prepare the relevant resources
 
 ### Install Rust and the Web Assembly tools
@@ -220,7 +223,8 @@ Finally, ignore all `.wasm` files from the repository, to avoid accidentally pus
 the providers you will build:
 
 ```gitignore
-# In .gitignore, add a line
+# In .gitignore, add lines
+/target/
 *.wasm
 ```
 
@@ -447,13 +451,13 @@ First, we need to add `serde_json` as a dependency as we will be working with a 
 # In Cargo.toml
 [dependencies]
 serde_json = "1"
-serde_aux = "4.1" # serde_aux provides helpers for JSON deserialization
+serde-aux = "4.1" # serde_aux provides helpers for JSON deserialization
 ```
 
 Then we add the data types that match the API entries we want to work with, and build a data-model that's relevant for the query
 
 ```rust
-use serde_aux::deserialize_number_from_string;
+use serde_aux::field_attributes::deserialize_number_from_string;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 struct User {
@@ -463,7 +467,7 @@ struct User {
     email: String,
     address: Address,
     phone: String,
-    webside: String,
+    website: String,
     company: Company
 }
 
@@ -481,12 +485,12 @@ struct Address {
 struct GeoLocation {
     #[serde(deserialize_with = "deserialize_number_from_string", rename = "lat")]
     latitude: f64,
-    #[serde(deserialize_with = "deserialize_number_from_string", rename = "lon")]
+    #[serde(deserialize_with = "deserialize_number_from_string", rename = "lng")]
     longitude: f64
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-#[serde(rename_all = camelCase)]
+#[serde(rename_all = "camelCase")]
 struct Company {
     name: String,
     catch_phrase: String,
@@ -531,11 +535,15 @@ fn distance_between(origin: GeoLocation, destination: GeoLocation) -> f64 {
     ((destination.longitude - origin.longitude).powi(2) + (destination.latitude - origin.latitude).powi(2)).sqrt()
 }
 
-fn closest_user(target: GeoLocation, users: &[User]) -> Option<(f64, User)> {
+pub fn closest_user(target: GeoLocation, users: &[User]) -> Option<(f64, User)> {
     users
         .iter()
-        .map(|user| (distance_between(user.geocode, target), user.clone()))
-        .min_by(|(distance_l, _), (distance_r, _)| distance_l.cmp(distance_r))
+        .map(|user| (distance_between(user.address.geocode, target), user.clone()))
+        .min_by(|(distance_l, _), (distance_r, _)| {
+            distance_l
+                .partial_cmp(distance_r)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })
 }
 ```
 
@@ -594,7 +602,7 @@ We now have all the building blocks to implement our query:
 ```rust
 async fn fetch_closest_user(config: &CatnipConfig, target: GeoLocation) -> Result<Option<(f64, User)>> {
     let users = fetch_users(config).await?;
-    Ok(closest_user(target, &users).cloned())
+    Ok(closest_user(target, &users).clone())
 }
 ```
     
@@ -654,32 +662,48 @@ long as we return a `fiberplane_pdk::prelude::Cells` that is transformed to a
     
 
 ```rust
-async fn find_closest_dispenser(query_data: CatnipClosestQuery, config: CatnipConfig) -> Result<Blob> {
-    let response = fetch_closest_user(&config, GeoLocation { latitude: query_data.latitude, longitude: query_data.longitude }).await?;
+async fn closest_dispenser_query_handler(query_data: CatnipClosestQuery, config: CatnipConfig) -> Result<Blob> {
+    let response = fetch_closest_user(
+        &config,
+        GeoLocation {
+            latitude: query_data
+                .latitude
+                .parse()
+                .map_err(|e| Error::Deserialization {
+                    message: format!("latitude is an invalid number: {e}"),
+                })?,
+            longitude: query_data
+                .longitude
+                .parse()
+                .map_err(|e| Error::Deserialization {
+                    message: format!("longitude is an invalid number: {e}"),
+                })?,
+        },
+    )
+    .await?;
     let cells = match response {
         None => {
-            vec![Cell::Text(TextCell {
-                id: "result".to_owned(),
-                content: "No dispenser was found!".to_string(),
-                formatting: Formatting::default(),
-                read_only: None,
-            })]
-        },
-        Ok((distance, dispenser)) => {
-            vec![Cell::Text(TextCell {
-                id: "result".to_owned(),
-                content: format!("The closest dispenser to you ({query_data.latitude}, {query_data.longitude}) is\n{} ({})\n\t{} {}\n\t{} {}",
+            vec![Cell::Text(TextCell::builder()
+                .id("result".to_owned())
+                .content("No dispenser was found!".to_string())
+                .formatting(Formatting::default())
+            .build())]
+        }
+        Some((distance, dispenser)) => {
+            vec![Cell::Text(TextCell::builder()
+                .id("result".to_owned())
+                .content(format!("The closest dispenser to you ({}, {}) is\n{} ({})\n\t{} {}\n\t{} {}",
+                    query_data.latitude,
+                    query_data.longitude,
                     dispenser.name,
                     distance,
                     dispenser.address.street,
                     dispenser.address.suite,
                     dispenser.address.city,
                     dispenser.address.zipcode
-                ),
-                formatting: Formatting::default(),
-                read_only: None,
-            })]
-        
+                ))
+                .formatting(Formatting::default())
+            .build())]
         }
     };
 
@@ -700,7 +724,8 @@ function.
 pdk_query_types! {
     CLOSEST_DISPENSER_QUERY => {
         label: "Catnip: find closest dispenser",
-        handler: find_closest_dispenser(CatnipClosestQuery, CatnipConfig),
+        handler: closest_dispenser_query_handler(CatnipClosestQuery, CatnipConfig),
+	async: true,
         supported_mime_types: [CELLS_MIME_TYPE]
     },
     STATUS_QUERY_TYPE => {
@@ -715,12 +740,14 @@ pdk_query_types! {
 You should be able to run the query from Studio now! To test it
 
 - Open `studio.fiberplane.com` and switch to your personal workspace
-- Add the data source for `catnip_provider` from the proxy to your workspace.
+- Add the data source for `catnip` from the proxy to your workspace.
 - Create a new notebook in your workspace
 - Try typing `/catnip` in a cell, and select your `Catnip: find closest dispenser` action
+![The slash command menu has catnip entries now](Tutorial/8 Catnip Slash Command.png)
 - Fill the latitude and longitude, and run the query
 
 The results should appear in a new cell in the notebook!
+![The provider cell in the notebook has results](Tutorial/9 Catnip cell called.png)
 
 ## Conclusion
 
