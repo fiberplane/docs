@@ -16,7 +16,7 @@ These functions are usable as long as you import `fiberplane_pdk::prelude::*` in
 your library code. These functions exist to allow you to use OS-level features by
 asking the runtime for information.
 
-For Fiberplane Daemon, these functions are implemented in [Provider Runtime
+For the Fiberplane Daemon, these functions are implemented in [Provider Runtime
 crate](https://github.com/fiberplane/fiberplane-rs/blob/main/fiberplane-provider-protocol/fiberplane-provider-runtime/src/spec/mod.rs),
 should you want to inspect the source.
 
@@ -84,7 +84,7 @@ pub fn random(len: u32) -> Vec<u8>;
 Query the hosting runtime for a source of randomness. Note that there is no
 guarantee that the random values you obtain this way to be cryptographically
 secure: it is entirely dependent on the runtime implementation. You can see the
-implementation of randomness for Fiberplane Daemon in the [Provider Runtime
+implementation of randomness for the Fiberplane Daemon in the [Provider Runtime
 crate](https://github.com/fiberplane/fiberplane-rs/blob/6679fbd0f1cbdac7c57422ae699e12bb35bed71b/fiberplane-provider-protocol/fiberplane-provider-runtime/src/spec/mod.rs#L116)
 source code.
 
