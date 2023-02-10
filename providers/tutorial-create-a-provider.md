@@ -286,8 +286,14 @@ currently in your personal workspace in the top left corner after logging in.
 Click the Settings cogs in the bottom left corner of the screen, and go to
 the "Proxies" category.
 
+![Select the "proxy" category on the bottom left settings cog](Tutorial/1 Select proxy settings.png)
+
 There, you will be able to create a new "Proxy", which needs a name
-(For example `tutorial`), and then you will get a token. **Do not lose it**!!
+(For example `tutorial-proxy`), and then you will get a token. **Do not lose it**!!
+
+
+![The Proxy management page](Tutorial/2 Add new proxy page.png)
+![Choosing a name for the new proxy](Tutorial/3 Fill proxy name.png)
 
 This token is a mandatory argument to run the Daemon on your machine, so that
 it can connect to Fiberplane Studio. A good way to save it is to put it in
@@ -358,11 +364,21 @@ in the list, and reported as "online". If it does not report as "online" even
 after 5 minutes, make sure that you copied the token correctly, and that
 the `fpd` instance you ran before is still up and runs without errors.
 
+![The status of the proxy and the provider on the settings page](Tutorial/4 Check proxy and provider.png)
+
+When the proxy reports as online, you can expand the line to also check the
+status of the provider.
+
 **Is the "Catnip" data source available?**
 
 Create a new, empty notebook in your workspace, and click the data sources icon in the
 top right corner. There should be an entry in the `Catnip` category, called
 `tutorial-provider`. Make sure it's there and active.
+
+In the following screenshot, the category is `Sample`, it should be `Catnip` for
+you:
+
+![The list of data sources in the notebook](Tutorial/5 Data sources in notebook.png)
 
 **Is the slash Command present?**
 
@@ -370,10 +386,14 @@ Go in a cell of the notebook, and hit `/`. The menu should appear, and now you
 can start typing `showcase`. You should see the 2 `Showcase` commands appear
 in the menu.
 
+![The slash command widget showing the new commands](Tutorial/6 Slash Command.png)
+
 **Is the Daemon communicating fine?**
 
 Accept any of the "Showcase" command, input some text in the fields, and try to
 run the Cell.
+
+![Calling the loaded provider](Tutorial/7 Sample cell called.png)
 
 If you obtain a result in the notebook, congratulations! You've successfully side-loaded
 a Web Assembly plugin to your Fiberplane workspace! This is (_was_) the hardest part of the
