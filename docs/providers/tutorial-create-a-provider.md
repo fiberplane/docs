@@ -180,7 +180,17 @@ $ git init .
 
 Once the repo is created, use the Cargo configuration feature to make the
 compiler default to Web Assembly compilation. Create a `.cargo` folder at the
-root of your repository, and a `config.toml` file[^profilerelease] inside:
+root of your repository:
+
+```
+catnip_provider/
+  .cargo/    # Create this folder
+  src/
+  Cargo.toml
+  ...
+```
+
+Then create a `config.toml` file[^profilerelease] inside:
 
 ```toml
 # In .cargo/config.toml
@@ -192,14 +202,20 @@ target = "wasm32-unknown-unknown"
     we add a few flags for building the providers using the least disk-space
     possible, you can see them in our
     [repository](https://github.com/fiberplane/providers/blob/main/providers/.cargo/config)
-    
+
 The last step to setup your replica of the sample provider is to own it by
-editing the `cargo.toml` file to set the name of the library:
+editing the `Cargo.toml` file in the project root to set the name of the library:
 
 ```toml
 # In Cargo.toml
 name = "catnip_provider"
-# ... Also edit the other metadata fields as you see fit, no `workspace` related metadata must stay in that section
+# ... Also edit the other metadata fields as you see fit,
+# no `workspace` related metadata must stay in that section
+## For example:
+description = "Fiberplane 'Catnip' Tutorial Provider"
+authors = [ "Fiberplane <info@fiberplane.com>" ]
+edition = "2021"
+version = "1.0.0"
 ```
 
 You will also need to update the `Cargo.toml` file to replace the "workspace"
@@ -227,6 +243,10 @@ the providers you will build:
 /target/
 *.wasm
 ```
+
+Feel free to check out the example
+[Cargo.toml](https://github.com/fiberplane/catnip-provider/blob/main/Cargo.toml)
+if you are not sure.
 
 > Important Note: from now on, you only stay in the directory of your provider repository.
 
