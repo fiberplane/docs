@@ -749,8 +749,7 @@ function.
 pdk_query_types! {
     CLOSEST_DISPENSER_QUERY => {
         label: "Catnip: find closest dispenser",
-        handler: closest_dispenser_query_handler(CatnipClosestQuery, CatnipConfig),
-	async: true,
+        handler: closest_dispenser_query_handler(CatnipClosestQuery, CatnipConfig).await,
         supported_mime_types: [CELLS_MIME_TYPE]
     },
     STATUS_QUERY_TYPE => {
