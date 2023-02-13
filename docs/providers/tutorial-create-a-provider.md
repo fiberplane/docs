@@ -248,6 +248,14 @@ Feel free to check out the example
 [Cargo.toml](https://github.com/fiberplane/catnip-provider/blob/main/Cargo.toml)
 if you are not sure.
 
+Make sure to commit these changes, the sample code you got automatically creates
+versioning variables based on git status, and at least one commit is mandatory:
+
+```console
+$ git add .
+$ git commit -m"Initial commit"
+```
+
 > Important Note: from now on, you only stay in the directory of your provider repository.
 
 #### Checkpoint
