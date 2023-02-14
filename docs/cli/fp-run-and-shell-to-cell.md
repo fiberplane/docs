@@ -38,7 +38,7 @@ You can now share the status of your pods and services directly into the noteboo
 
 And here’s how that will look like in the notebook:
 
-![Untitled](docs/cli/fp-run/Untitled.png)
+![Untitled](/docs/cli/fp-run/Untitled.png)
 
 ### Rich output
 

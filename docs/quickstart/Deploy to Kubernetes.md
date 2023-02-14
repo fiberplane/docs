@@ -8,7 +8,7 @@ slug: deploy-to-kubernetes
 
 ### Generate an `fpd` API Token in the Studio
 
-![Register an FPD](docs/quickstrat/register_an_fpd.png)
+![Register an FPD](/docs/quickstrat/register_an_fpd.png)
 
 In order for the `fpd` to talk to the Fiberplane Studio successfully it needs to be successfully authorized. This step will generate a **`fpd` API Token** that will be needed later.
 
@@ -94,4 +94,4 @@ kubectl apply -f deployment.yml
 
 Once you complete your Proxy setup, your data sources linked in the Proxy configuration should be recognized by the Studio - you can verify this again by going to the **Settings > Data Sources** screen.👇
 
-![Untitled](docs/quickstart/deploy-to-kubernetes/Untitled.png)
+![Untitled](/docs/quickstart/deploy-to-kubernetes/Untitled.png)

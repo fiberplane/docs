@@ -8,7 +8,7 @@ Fiberplane Studio is available for the [Web](https://fiberplane.com/).
 
 To get started go to [https://fiberplane.com/](https://fiberplane.com/) and log in with your Fiberplane account (currently available only for Google Workspace users). You can also go right away to your notebook by typing [fp.new](https://fp.new/) in your URL, however, to save and store your notebook, you will need to log in.
 
-![How it works](docs/fpd.png)
+![How it works](/docs/fpd.png)
 
 ## How Fiberplane works
 
@@ -35,7 +35,7 @@ You can do it in the Settings > FPD menu or using our CLI tool.
 
 ### Generate an FPD API Token in the Studio
 
-![Register a proxy](docs/quickstart/register_a_proxy.png)
+![Register a proxy](/docs/quickstart/register_a_proxy.png)
 
 In order for the Daemon to talk to the Fiberplane Studio successfully it needs to be successfully authorized. This step will generate a **Daemon API Token** that will be needed later.
 
