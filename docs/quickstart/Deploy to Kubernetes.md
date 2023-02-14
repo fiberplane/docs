@@ -8,7 +8,7 @@ slug: deploy-to-kubernetes
 
 ### Generate an `fpd` API Token in the Studio
 
-![Register an FPD](/docs/quickstrat/register_an_fpd.png)
+![Register an FPD](/docs/quickstart/register_an_fpd.png)
 
 In order for the `fpd` to talk to the Fiberplane Studio successfully it needs to be successfully authorized. This step will generate a **`fpd` API Token** that will be needed later.
 
