@@ -7,6 +7,10 @@ jobs:
   dry-run:
     runs-on: ubuntu-latest
     steps:
+
+    - name: Checkout this repo
+      uses: actions/checkout@v3
+
     - name: Dry run a ReadMe sync
       uses: readmeio/rdme@v8
       env:
