@@ -8,7 +8,7 @@ slug: deploy-to-docker
 
 ### Generate a `fpd` API Token in the Studio
 
-![Register a proxy](/docs/quickstart/register_an_fpd.png)
+![Register a daemon](/docs/quickstart/register_an_fpd.png)
 
 In order for the `fpd` to talk to the Fiberplane Studio successfully it needs to be successfully authorized. This step will generate a **`fpd` API Token** that will be needed later.
 
