@@ -4,17 +4,9 @@ category: 63d7e8bf2482560ba8b126e0
 slug: cli
 ---
 
-Fiberplane CLI is a command-line tool that helps you install Proxies, set up
-Providers data sources, create and manage Notebooks and Templates all from your
-terminal.
+Fiberplane CLI is a command-line tool that helps you install Proxies, set up Providers data sources, create and manage Notebooks and Templates all from your terminal.
 
----
-
-[Command Reference](cli/reference) 
-
-## Getting started with the CLI
-
-### Installing
+## Installing the CLI
 
 Download and install the Fiberplane CLI
 
@@ -36,9 +28,9 @@ fp login
 
 Verify that Fiberplane CLI is working correctly by typing fp without any arguments. You should see a list of available commands.
 
-![CLI](cli/cli.png)
+![CLI](/docs/cli/cli.png)
 
-### Updating
+## Updating the CLI
 
 To update simply type:
 

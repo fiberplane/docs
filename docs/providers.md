@@ -4,13 +4,9 @@ category: 63d7e8bdbf7b4b0e0745e823
 slug: setting-up-providers
 ---
 
-Providers are full-stack plugins in Fiberplane that allow you to pull in live
-data directly from your infrastructure data sources into your Notebooks. They
-are compiled to WebAssembly and can run both on the Studio and the Proxy.
+Providers are full-stack plugins in Fiberplane that allow you to pull in live data directly from your infrastructure data sources into your Notebooks. They are compiled to WebAssembly and can run both on the Studio and the `fpd`.
 
-Your data sources can be added from the Studio using direct access (if your data
-sources URL are open) or using the `data_sources.yaml` file that is then passed
-in the Docker or Kubernetes configuration. Here’s an example configuration
+Your data sources can be added from the Studio using direct access (if your data sources URL are open) or using the `data_sources.yaml` file that is then passed in the Docker or Kubernetes configuration. Here’s an example configuration
 
 ```yaml
 # data_sources.yaml
@@ -20,10 +16,10 @@ in the Docker or Kubernetes configuration. Here’s an example configuration
   description: Prometheus (Production)
   providerType: prometheus
   config:
-    # Replace the following line with your Prometheus URL and port
-    url: http://prometheus:9090
-		# If accessing your data source requires authentication - add the token below
-		token: <TOKEN>
+      # Replace the following line with your Prometheus URL and port
+      url: http://prometheus:9090
+      # If accessing your data source requires authentication - add the token below
+      token: <TOKEN>
 ```
 
 ## Prometheus

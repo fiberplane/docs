@@ -6,9 +6,9 @@ slug: elasticsearch
 
 Write and run Lucene queries, and show Elasticsearch logs alongside the rest of your content.
 
-![Elasticsearch](providers/Elasticsearch/elasticsearch.png)
+![Elasticsearch](/docs/providers/Elasticsearch/elasticsearch.png)
 
-# Setup
+## Setup
 
 In order to enable Elasticsearch Provider in Fiberplane you need to either add it via direct access (for an openly accessible URL) or add it as a valid entry in the `data_source.yaml` configuration.
 
@@ -17,7 +17,6 @@ The `data_sources.yaml` format for adding a Elasticsearch Provider looks like th
 ```yaml
 # data_sources.yaml
 #
-# Replace the following line with the name of the data source
 - name: elasticsearch-dev
   description: Elasticsearch (Dev)
   providerType: elasticsearch
@@ -28,23 +27,23 @@ The `data_sources.yaml` format for adding a Elasticsearch Provider looks like th
     token: <ApiKey>
 ```
 
-# Usage
+## Usage
 
-## Create an Elasticsearch table
+### Create an Elasticsearch table
 
 1. Hit `/` and select “Elasticsearch” from the available options
 2. Write a Lucene query you want to run to pull Elasticsearch logs.
 3. Hit CTRL + ENTER or ⌘↩︎ if you’re on a Mac to run it.
 
-## Chart time range
+### Chart time range
 
 By default, the query will follow the Notebook time range (configured at the top of the Notebook) so all of your charts in a notebook use the same time range. As you change the Notebook time range it will update all of your charts automatically.
 
 You can also set a chart-specific time range overrides by clicking the link icon at the top of the chart.
 
-![Elasticsearch query](providers/Elasticsearch/elastic-query.png)
+![Elasticsearch query](/docs/providers/Elasticsearch/elastic-query.png)
 
-## Expand, select, highlight, and export records
+### Expand, select, highlight, and export records
 
 Once logs are loaded you can:
 
