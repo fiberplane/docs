@@ -4,8 +4,6 @@ category: 63d7e8c259d696004978b93b
 slug: pagerduty-integration
 ---
 
-# PagerDuty Integration
-
 - Create a Fiberplane notebook automatically when a PagerDuty incident is acknowledged.
 - Use Fiberplane templates to start an incident investigation with everything you need.
 - Update the PagerDuty incident with the Fiberplane notebook URL to click straight from the incident to the investigation.
@@ -33,9 +31,8 @@ If you need help with this integration, please contact ***[support@fiberplane.co
 1. Go to the **incident-response-pagerdutyV3** template found in the [Fiberplane Quickstart Repository](https://github.com/fiberplane/quickstart/tree/main/templates/incident-response-pagerdutyV3)
 2. Follow the instructions to create a template and trigger using the CLI.
 3. Note the **Trigger URL** for later use.
-    
-![Creating a template in Fiberplane](templates/pagerduty-integration/1-creating-template.png)
-    
+
+![Creating a template in Fiberplane](/docs/templates/pagerduty-integration/1-creating-template.png)
 
 ### In the AWS console
 
@@ -47,14 +44,14 @@ If you need help with this integration, please contact ***[support@fiberplane.co
 6. In the **Code source** section double click the folder named **fp-PagerDuty-integration** and then double click **lambda_function.py** to open the file in the code editor.
 7. In a separate browser tab open the **lambda_function.py** page in the PagerDuty integration section of the [Fiberplane Quickstart Repository](https://raw.githubusercontent.com/fiberplane/quickstart/main/integrations/PagerDuty/lambda_function.py) and copy all of the contents of the file.
 
-![Copy the Python lambda function](pagerduty-integration/2-lambda-function.png)
+![Copy the Python lambda function](/docs/pagerduty-integration/2-lambda-function.png)
 
 1. Switch back to the AWS lambda console in your browser and paste the code into the **lambda_function.py** file in the **Code source** editor**.**
-2. Press **File → Save** in the **Code source** editor. 
+2. Press **File → Save** in the **Code source** editor.
 3. Press **Deploy.**
 4. Copy the **Function URL** in the **Function Overview** section.
 
-![Copy the function URL in AWS Console](templates/pagerduty-integration/3-copy-function-url.png)
+![Copy the function URL in AWS Console](/docs/templates/pagerduty-integration/3-copy-function-url.png)
 
 ### In PagerDuty
 
@@ -70,23 +67,23 @@ If you need help with this integration, please contact ***[support@fiberplane.co
 10. Type **pd-apikey** in the **name** field and add your PagerDuty API key in the **value** field.
 11. Click **Add Webhook** and then **OK**
 
-![Untitled](templates/pagerduty-integration/4-create-pagerduty-webhook.png)
+![Untitled](/docs/templates/pagerduty-integration/4-create-pagerduty-webhook.png)
 
-![Untitled](templates/pagerduty-integration/5-webhook-headers.png)
+![Untitled](/docs/templates/pagerduty-integration/5-webhook-headers.png)
 
 ## Testing the integration
 
 1. Go to the **Incidents** screen in PagerDuty and click **+ New Incident**
 2. Select an **Impacted Service** and add a **Title** to the incident and optionally select an **Urgency, Incident Priority** and **Description.**
-3. Click **Create Incident** 
+3. Click **Create Incident**
 4. Click **! Acknowledge**
 5. Check that the notebook URL is updated in the incident notes:
 
-![Untitled](templates/pagerduty-integration/6-test-pagerduty-webhook.png)
+![Untitled](/docs/templates/pagerduty-integration/6-test-pagerduty-webhook.png)
 
 1. Click on the URL and ensure that it takes you through to the notebook and the notebook is correctly filled out with the data:
 
-![Untitled](templates/pagerduty-integration/7-test-fiberplane-notebook.png)
+![Untitled](/docs/templates/pagerduty-integration/7-test-fiberplane-notebook.png)
 
 ## How to Uninstall
 

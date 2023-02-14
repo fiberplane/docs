@@ -46,7 +46,7 @@ function(incidentName='API Outage')
   fp.notebook
 
 # Calls a method that adds a title for the notebook passing a harcoded string 
-#	and the parameter concatenated.
+# and the parameter concatenated.
 
   .new('Incident Response for: ' + incidentName) 
 
@@ -55,6 +55,4 @@ function(incidentName='API Outage')
   .setTimeRangeRelative(minutes=60)
 ```
 
-We'll cover each of these in greater detail in the docs on the left-hand side.
-By the way: you can find more practical, use-case specific template examples in
-our [Quickstart repo in the "templates/"](http://github.com/fiberplane/quickstart) subdirectory
+We'll cover each of these in greater detail in the docs on the left-hand side. By the way: you can find more practical, use-case specific template examples in our [Quickstart repo in the "templates/"](http://github.com/fiberplane/quickstart) subdirectory
