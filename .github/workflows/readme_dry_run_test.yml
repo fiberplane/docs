@@ -1,0 +1,16 @@
+---
+name: ReadMe dry run on PR test
+
+on: [push, pull_request]
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dry run a ReadMe sync
+      uses: readmeio/rdme@v8
+      env:
+        RDME_API_KEY: ${{ secrets.README_API_KEY }}
+      with:
+        rdme: docs docs/ --dryRun
+
