@@ -1,0 +1,7 @@
+{
+	"default": true,
+	"no-hard-tabs": false, // disable "no hard tabs rule"
+	"line-length": false, // disable "line length" rule
+	"no-duplicate-heading": false, // disable "no duplicate headings" rule
+	"ol-prefix": false
+}

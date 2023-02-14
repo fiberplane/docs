@@ -65,7 +65,6 @@ fp login
 
 To register a daemon run a command `fp daemon create`:
 
-<!-- markdownlint-disable -->
 ```shell
 $ fp daemon create my-daemon-name
 		Name:  my-daemon-name
@@ -74,7 +73,6 @@ $ fp daemon create my-daemon-name
  Datasources:  (none)
         Token  <YOUR_DAEMON_API_TOKEN> <-- SAVE THIS FOR LATER!
 ```
-<!-- markdownlint-enable -->
 
 You can leave out the daemon name to have one randomly generated, but we recommend naming it according to the environment it will be deployed to (for example, `production`). Note that daemon names must follow the [Fiberplane name format](doc:configuration-help-faq#resource-names).
 

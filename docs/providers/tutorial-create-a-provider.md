@@ -214,7 +214,7 @@ Try to compile your provider, make sure that it's targeting web assembly and the
 cargo build && wasm-opt -Oz -c -o "./catnip.wasm" "target/wasm32-unknown-unknown/debug/catnip_provider.wasm"
 ```
 
-**Compilation Error**
+##### CompilationError*
 
 If you have a compilation error, and just copied the sample provider, make sure that you pulled the lastest version of the sample provider:
 
@@ -231,7 +231,7 @@ And try to compile again with `cargo build`.
 
 If it still fails, then it's an issue with our own provider development kit. Please file an issue to the repo with the title "Sample Provider does not compile".
 
-**Wasm optimization error**
+##### Wasmoptimizationerror
 
 If the `wasm-opt` operation fails, it can mostly fail for 2 reasons:
 
