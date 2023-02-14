@@ -46,11 +46,14 @@ Everything you write in a notebook is a **cell**. A cell can contain text (in it
 Most cells have the ability to display rich text in them. You can **bold**,
 *italicize*, highlight,  ~~strikethrough~~ content or insert `in-line code` and [links](https://www.notion.so/fiberplane/docs.fiberplane.com). Cells include rich markdown support so you can type all of the above characters using their respective syntax:
 
+<!--markdownlint-disable MD049-->
+
 | Syntax | Formatting |
 | --- | --- |
 | *bold* | Bold |
 | _italic_ | Italic |
 | `code` | Code (monotype) |
+<!--markdownlint-enable MD049-->
 
 Besides these basic rich text editing features, Fiberplane also includes a number of further enhancements to help you distinguish your content.
 

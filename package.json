@@ -1,0 +1,24 @@
+{
+  "name": "fiberplane-docs",
+  "version": "1.0.0",
+  "description": "Documentation for Fiberplane API, Providers, and CLI",
+  "scripts": {
+    "lint": "markdownlint-cli2 'docs/**/*.md' '#node_modules'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fiberplane/docs.git"
+  },
+  "keywords": [
+    "documentation"
+  ],
+  "author": "Fiberplane <info@fiberplane.com>",
+  "license": "MIT OR Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/fiberplane/docs/issues"
+  },
+  "homepage": "https://fiberplane.com",
+  "devDependencies": {
+    "markdownlint-cli2": "^0.6.0"
+  }
+}

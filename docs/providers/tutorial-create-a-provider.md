@@ -32,24 +32,24 @@ Install wasm-opt to optimize your plugins before they reach production. Wasm-opt
 
 - Go to the [releases page](https://github.com/WebAssembly/binaryen/releases) and then download the tarball for the latest release (version 111 as of the day of writing). I am showing it in command line:
 
-```console
-$ wget https://github.com/WebAssembly/binaryen/releases/download/version_111/binaryen-version_111-arm64-macos.tar.gz
-<some output>
-$ ls -la
-.rw-r--r--@ 5.1M you 22 Nov  2022 binaryen-version_111-arm64-macos.tar.gz
+```shell
+wget https://github.com/WebAssembly/binaryen/releases/download/version_111/binaryen-version_111-arm64-macos.tar.gz
+# <some output>
+ls -la
+# .rw-r--r--@ 5.1M you 22 Nov  2022 binaryen-version_111-arm64-macos.tar.gz
 ```
 
 - Decompress the tarball in a directory on your machine.
 
-```console
-$ tar -xzf binaryen-version_111-arm64-macos.tar.gz
-$ ls binaryen-version_111/
-bin  include  lib
+```shell
+tar -xzf binaryen-version_111-arm64-macos.tar.gz
+ls binaryen-version_111/
+# bin  include  lib
 ```
 
 - Add the `bin` subdirectory of the tarball to your path. In the example below, we assume that the tarball has been decompressed in `/Users/you/opt`
 
-```sh
+```shell
 # In your shell rc file (.bashrc, .zshrc, .config/fish/config.fish....)
 export PATH="/Users/you/opt/binaryen-version_111/bin:${PATH}"
 ```
@@ -214,7 +214,7 @@ Try to compile your provider, make sure that it's targeting web assembly and the
 cargo build && wasm-opt -Oz -c -o "./catnip.wasm" "target/wasm32-unknown-unknown/debug/catnip_provider.wasm"
 ```
 
-**Compilation Error**
+##### CompilationError
 
 If you have a compilation error, and just copied the sample provider, make sure that you pulled the lastest version of the sample provider:
 
@@ -231,7 +231,7 @@ And try to compile again with `cargo build`.
 
 If it still fails, then it's an issue with our own provider development kit. Please file an issue to the repo with the title "Sample Provider does not compile".
 
-**Wasm optimization error**
+##### Wasm optimization error
 
 If the `wasm-opt` operation fails, it can mostly fail for 2 reasons:
 
