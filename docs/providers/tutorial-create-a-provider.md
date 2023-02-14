@@ -98,12 +98,7 @@ By that criterion, authentication values are very good configuration values. Our
 
 #### Testing a SDK for serverless WebAssembly compilation
 
-Sometimes the third party resource you want to integrate provides a Rust SDK.  But beware! There are a few libraries that will fail (either at compile time or at run time) when compiled for serverless WASM. So if you are not sure that the SDK will work with serverless wasm, it is better to find a classic API (on top of HTTP or WebSocket protocols) documentation to communicate with the third party resource. We will cover "finding out if the SDK works in serverless wasm" when setting up the project.  When things don't work as expected, you can ask for help or guidance online[^serverlesswasm].
-
-[^serverlesswasm]: The space of serverless WebAssembly is still
-    young and a lot of package maintainers can make the change or help you make the change to get a library to compile and
-    run for WebAssembly. Sometimes it means finding out support is [already there](https://github.com/gyscos/zstd-rs/pull/139),
-    sometimes it means [adding items to their roadmap](https://github.com/awslabs/aws-sdk-rust/discussions/679)
+Sometimes the third party resource you want to integrate provides a Rust SDK.  But beware! There are a few libraries that will fail (either at compile time or at run time) when compiled for serverless WASM. So if you are not sure that the SDK will work with serverless wasm, it is better to find a classic API (on top of HTTP or WebSocket protocols) documentation to communicate with the third party resource. We will cover "finding out if the SDK works in serverless wasm" when setting up the project.  When things don't work as expected, you can ask for help or guidance online
 
 #### Checkpoint
 
@@ -150,7 +145,7 @@ catnip_provider/
   ...
 ```
 
-Then create a `config.toml` file[^profilerelease] inside:
+Then create a `config.toml` file inside:
 
 ```toml
 # In .cargo/config.toml
@@ -158,10 +153,7 @@ Then create a `config.toml` file[^profilerelease] inside:
 target = "wasm32-unknown-unknown"
 ```
 
-[^profilerelease]: You can also add a few other flags if you want. At Fiberplane
-    we add a few flags for building the providers using the least disk-space
-    possible, you can see them in our
-    [repository](https://github.com/fiberplane/providers/blob/main/providers/.cargo/config)
+You can also add a few other flags if you want. At Fiberplane we add a few flags for building the providers using the least disk-space possible, you can see them in our [repository](https://github.com/fiberplane/providers/blob/main/providers/.cargo/config)
 
 The last step to setup your replica of the sample provider is to own it by editing the `Cargo.toml` file in the project root to set the name of the library:
 
@@ -288,16 +280,13 @@ for the token right? Something like `FPD_TOKEN`. Either case, for now it's
 #### Add a `data_sources.yaml` file to configure the provider
 
 You can use `fpd` to edit and create a sample `data_sources.yaml` file to
-use your provider, in the current directory[^canonical]:
-
-[^canonical]: Fiberplane Daemon is configured to look for the data_sources configuration
-    in the current working directory, and then in a canonical absolute path, if the
-    command-line flag is absent. For the tutorial we will just use the current directory,
-    but the recommended absolute location is the path returned by `fpd config paths data-sources`
+use your provider, in the current directory:
 
 ```shell
 touch data_sources.yaml
 ```
+
+Fiberplane Daemon is configured to look for the data_sources configuration in the current working directory, and then in a canonical absolute path, if the command-line flag is absent. For the tutorial we will just use the current directory, but the recommended absolute location is the path returned by `fpd config paths data-sources`
 
 In the `data_sources.yaml` file you are now editing, add this content:
 
