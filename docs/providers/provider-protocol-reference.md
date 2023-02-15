@@ -102,7 +102,7 @@ This function only needs to be implemented by providers that are statically bund
 
 These functions are usable as long as you import `fiberplane_pdk::prelude::*` in your library code. These functions allow you to access features provided to you by the runtime.
 
-For the Fiberplane Daemon, these functions are implemented in the [Provider Runtime crate](https://crates.io/crates/fiberplane-provider-runtime).
+For the Fiberplane Daemon, these functions are implemented in the [Provider Runtime crate](https://docs.rs/fiberplane-provider-runtime/latest/fiberplane_provider_runtime/).
 
 ### `make_http_request`
 
