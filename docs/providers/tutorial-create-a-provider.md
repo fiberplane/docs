@@ -6,7 +6,7 @@ slug: create-a-provider
 
 This tutorial aims to help you create and modify your first provider. It will not touch "advanced" cell types like the graph and the log cells, but will help you integrate a third-party resource so that any output from it can be added to a notebook with only a `/` command (we call those "slash commands").
 
-This tutorial focuses on writing the provider in Rust, to be able to use the convenience macros from Fiberplane Plugin Development Kit (PDK).  Provider Development Kits for other languages are coming later.
+This tutorial focuses on writing the provider in Rust, to be able to use the convenience macros from Fiberplane Provider Development Kit (PDK). Provider Development Kits for other languages are coming later.
 
 All the code for the provider created through this tutorial is available
 on [Github](https://github.com/fiberplane/catnip-provider)
@@ -15,7 +15,7 @@ on [Github](https://github.com/fiberplane/catnip-provider)
 
 ### Install Rust and the Web Assembly tools
 
-The necessary tools to install to work with Fiberplane Plugin Development Kit are:
+The necessary tools to install to work with Fiberplane Provider Development Kit are:
 
 #### Rustup
 
@@ -243,7 +243,7 @@ To resolve:
 - check that the name of the library crate matches the name of the wasm you're optimizing.
 - check that you have correctly created the `.cargo/config.toml` file that changes the default compilation target to `wasm32-unknown-unknown`.
 
-### Install Fiberplane Daemon and setup the token to load the sample provider in the proxy
+### Install Fiberplane Daemon and setup the token to load the sample provider in the Daemon
 
 #### Install the Daemon
 
@@ -253,29 +253,29 @@ Install [Fiberplane Daemon](https://github.com/fiberplane/fpd) using cargo:
 cargo install --locked fpd
 ```
 
-#### Create a token for the proxy in your personal workspace
+#### Create a token for the daemon in your personal workspace
 
 Go to [Fiberplane Studio](https://studio.fiberplane.com), make sure you are currently in your personal workspace in the top left corner after logging in.
 
-Click the Settings cogs in the bottom left corner of the screen, and go to the "Proxies" category.
+Click the Settings cogs in the bottom left corner of the screen, and go to the "FPD" category.
 
-![Select the "proxy" category on the bottom left settings cog](/docs/providers/Tutorial/1_Select_proxy_settings.png)
+> **Erratum**: In all the following screenshot, you will see mentions of "Proxy" instead of "FPD".
+  Proxy is the old name we had for Fiberplane Daemon, so please mentally replace all "Proxy" mentions
+  with "FPD".
 
-There, you will be able to create a new "Proxy", which needs a name (For example `tutorial-proxy`), and then you will get a token. **Do not lose it**!!
+![Select the "FPD" category on the bottom left settings cog](/docs/providers/Tutorial/1_Select_proxy_settings.png)
 
-![The Proxy management page](/docs/providers/Tutorial/2_Add_new_proxy_page.png)
+There, you will be able to create a new "FPD", which needs a name (For example `tutorial-proxy`), and then you will get a token. **Do not lose it**!!
 
-![Choosing a name for the new proxy](/docs/providers/Tutorial/3_Fill_proxy_name.png)
+![The FPD management page](/docs/providers/Tutorial/2_Add_new_proxy_page.png)
+
+![Choosing a name for the new FPD](/docs/providers/Tutorial/3_Fill_proxy_name.png)
 
 This token is a mandatory argument to run the Daemon on your machine, so that it can connect to Fiberplane Studio. A good way to save it is to put it in your environment, as the Daemon will look into the environment for the token if not provided in the command line:
 
 ```shell
 export TOKEN="<token content>"
 ```
-
-> **Note**: This is probably a good reason to rename the environment variable
-for the token right? Something like `FPD_TOKEN`. Either case, for now it's
-`TOKEN`
 
 #### Add a `data_sources.yaml` file to configure the provider
 
@@ -321,13 +321,13 @@ fpd --token <TOKEN> --wasm-dir .
 
 With your Daemon running and connected to Studio, you can immediately test if "side loading" the provider worked:
 
-**Is the `tutorial` proxy active?**
+**Is the `tutorial` daemon active?**
 
-Go to your Proxy settings page: make sure that the proxy you created is present in the list, and reported as "online". If it does not report as "online" even after 5 minutes, make sure that you copied the token correctly, and that the `fpd` instance you ran before is still up and runs without errors.
+Go to your FPD settings page: make sure that the daemon you created is present in the list, and reported as "online". If it does not report as "online" even after 5 minutes, make sure that you copied the token correctly, and that the `fpd` instance you ran before is still up and runs without errors.
 
-![The status of the proxy and the provider on the settings page](/docs/providers/Tutorial/4_Check_proxy_and_provider.png)
+![The status of the FPD and the provider on the settings page](/docs/providers/Tutorial/4_Check_proxy_and_provider.png)
 
-When the proxy reports as online, you can expand the line to also check the status of the provider.
+When the daemon reports as online, you can expand the line to also check the status of the provider.
 
 **Is the "Catnip" data source available?**
 
@@ -642,7 +642,7 @@ pdk_query_types! {
 You should be able to run the query from Studio now! To test it
 
 - Open `studio.fiberplane.com` and switch to your personal workspace
-- Add the data source for `catnip` from the proxy to your workspace.
+- Add the data source for `catnip` from the daemon to your workspace.
 - Create a new notebook in your workspace
 - Try typing `/catnip` in a cell, and select your `Catnip: find closest dispenser` action
 
