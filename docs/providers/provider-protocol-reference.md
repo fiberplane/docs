@@ -4,13 +4,105 @@ category: 63e0c7cf7166bf006d3b4117
 slug: provider-protocol-reference
 ---
 
-All functions described here are bindings generated with fp-bindgen.  The key/values to use for these payloads are exactly the ones you can find in `fiberplane::models` [crate documentation](https://docs.rs/fiberplane-models/latest/fiberplane-models)
+All functions described here are bindings that are generated from our [provider protocol](https://github.com/fiberplane/fiberplane/tree/main/fiberplane-provider-protocol) and which are publish as our [provider bindings crate](https://docs.rs/fiberplane-provider-bindings/latest/fiberplane_provider_bindings/). Please refer to the crate for more details on any of the types mentioned below.
+
+We use [`fp-bindgen`](https://github.com/fiberplane/fp-bindgen) for generating the bindings themselves.
+
+## Exported functions
+
+Exported functions are functions that your provider implements, and that the runtime will call. In order to make those exported functions usable in Fiberplane, they must be annotated with `#[pdk_export]`.
+
+### `get_supported_query_types`
+
+It is advised to use the [Plugin Development Kit](https://docs.rs/fiberplane-pdk/latest/fiberplane_pdk/) rather than implementing this function manually. The [`pdk_query_types!`](https://docs.rs/fiberplane-pdk-macros/latest/fiberplane_pdk_macros/macro.pdk_query_types.html) macro can be used to generate this function for you. See the [tutorial](doc:create-a-provider) for more information about using the PDK.
+
+#### Signature
+
+```rust
+pub async fn get_supported_query_types(config: ProviderConfig) -> Vec<SupportedQueryType>;
+```
+
+#### Description
+
+Returns the query types supported by this provider. This function allows Studio to know upfront which formats will be supported, and which providers (and their query types) are eligible to be selected for certain use cases.
+
+### `invoke2`
+
+It is advised to use the [Plugin Development Kit](https://docs.rs/fiberplane-pdk/latest/fiberplane_pdk/) rather than implementing this function manually. The [`pdk_query_types!`](https://docs.rs/fiberplane-pdk-macros/latest/fiberplane_pdk_macros/macro.pdk_query_types.html) macro can be used to generate this function for you. See the [tutorial](doc:create-a-provider) for more information about using the PDK.
+
+#### Signature
+
+```rust
+pub async fn invoke2(request: ProviderRequest) -> Result<Blob>;
+```
+
+#### Description
+
+Invokes the provider to perform a data request.
+
+### `create_cells` (Optional)
+
+#### Signature
+
+```rust
+pub fn create_cells(query_type: String, response: Blob) -> Result<Vec<Cell>>;
+```
+
+#### Description
+
+Creates output cells based on the response (a `Blob` that the provider previously sent to answer an `invoke2` call). Studio would typically embed the created cells in the provider cell, but other actions could be desired.
+
+When any created cells use a `data-links` field with the value `cell-data:<mime-type>,self` (such as Log cells or Graph cells), Studio will replace the value `self` with the ID of the cell for which the query was invoked. This allows the provider to create cells that reference its own data without knowing the context of the cell in which it was executed.
+
+Note that implementing `create_cells` is optional. If `invoke2` returns a Blob with a MIME type of `application/vnd.fiberplane.cells` (suffixed with either `+json` or `+msgpack`), that response will be parsed into an array of cells, and the call to this function is elided. A consequence of this approach is that the blob with the response does not get stored on the provider cell -- only the parsed cells will be stored. This can make this approach less suitable for graph cells and log cells, for instance, but makes it more efficient when there is no need to refer to the data after the cells are instantiated.
+
+### `extract_data` (Optional)
+
+#### Signature
+
+```rust
+pub fn extract_data(response: Blob, mime_type: String, query: Option<String>) -> Result<Blob>;
+```
+
+#### Description
+
+Takes the response data, and returns it in the given MIME type, optionally passing an additional query string to customize extraction behavior.
+
+Returns `Err(Error::UnsupportedRequest)` if an unsupported MIME type is passed.
+
+Please be aware that in order for Studio to parse response blobs, the MIME type has to specify the encoding format, using either the `+json` or `+msgpack` suffix. This applies to all the MIME types recognized by Studio, such as:
+
+- `application/vnd.fiberplane.cells`
+- `application/vnd.fiberplane.events`
+- `application/vnd.fiberplane.timeseries`
+
+While Blobs must specify the encoding suffix for their data to be correctly parsed, the `mime_type` that is _requested_ does not specify it. The implementation is then free to decide which encoding to use for the blob it returns.
+
+When deriving the [`ProviderData` trait](https://docs.rs/fiberplane-pdk/latest/fiberplane_pdk/provider_data/trait.ProviderData.html), its `to_blob()` helper will automatically pick a suitable encoding for you.
+
+Note: When the MIME type in the provider response is the same as the MIME type given as the second argument (sans encoding suffix), and the `query` is omitted, the return value is expected to be equivalent to the raw response data. This means Studio should be allowed to elide calls to this function if there is no query string and the MIME type is an exact match. This elision should not change the outcome.
+
+### `get_config_schema` (Optional)
+
+#### Signature
+
+```rust
+pub fn get_config_schema() -> ConfigSchema;
+```
+
+#### Description
+
+Returns the schema for the config consumed by this provider.
+
+Note this schema is only used by Studio to display a configuration form in case the provider is configured as a direct data source. The provider itself is responsible for validating the contents of its config. Assuming the provider uses Serde for parsing the config, validation is done at that stage.
+
+This function only needs to be implemented by providers that are statically bundled with Studio. You should never have to implement it, it is mentioned here for the sake of completeness.
 
 ## Imported functions
 
-These functions are usable as long as you import `fiberplane_pdk::prelude::*` in your library code. These functions exist to allow you to use OS-level features by asking the runtime for information.
+These functions are usable as long as you import `fiberplane_pdk::prelude::*` in your library code. These functions allow you to access features provided to you by the runtime.
 
-For the Fiberplane Daemon, these functions are implemented in [Provider Runtime crate](https://github.com/fiberplane/fiberplane-rs/blob/main/fiberplane-provider-protocol/fiberplane-provider-runtime/src/spec/mod.rs), should you want to inspect the source.
+For the Fiberplane Daemon, these functions are implemented in the [Provider Runtime crate](https://crates.io/crates/fiberplane-provider-runtime).
 
 ### `make_http_request`
 
@@ -30,12 +122,12 @@ let url = base_url
     .join("/users")
     .unwrap();
 
-let request = HttpRequest {
-    url,
-    headers: None,
-    method: HttpRequestMethod::Get,
-    body: None,
-};
+let request = HttpRequest::builder()
+    .method(HttpRequestMethod::Get)
+    .url(url.to_string())
+    .body(None)
+    .headers(None)
+    .build();
 
 let response = make_http_request(request).await?;
 
@@ -91,7 +183,7 @@ register_custom_getrandom!(use_fp_bindings);
 ```
 
 > Note: this example snippet might prove generic and useful enough to be upstreamed
-  by Fiberplane and available as a public helper crate. Stay tuned!
+> by Fiberplane and available as a public helper crate. Stay tuned!
 
 ### `now`
 
@@ -104,83 +196,3 @@ pub fn now() -> Timestamp;
 #### Description
 
 Returns a timestamp of the current time of execution. The usefulness of this timestamp comes from what you want to do with timers, or signature creation/verification schemes.
-
-## Exported functions
-
-Exported functions are functions that your provider implements, and that the runtime will call. In order to make those exported functions usable in Fiberplane, they must be annotated with `#[pdk_export]`.
-
-### `get_supported_query_types`
-
-It is usually safer to use the Plugin Development Kit macros to let the compiler generate correct implementations of these functions. A correct `pdk_query_types!` invocation will generate this function for you. See the [tutorial](doc:create-a-provider) for more information about using the PDK
-
-#### Signature
-
-```rust
-pub async fn get_supported_query_types(config: ProviderConfig) -> Vec<SupportedQueryType>;
-```
-
-#### Description
-
-Returns the query types supported by this provider.  This function allows Studio to know upfront which formats will be supported, and which providers (and their query types) are eligible to be selected for certain use cases.
-
-### `invoke2`
-
-It is usually safer to use the Plugin Development Kit macros to let the compiler generate correct implementations of these functions. A correct `pdk_query_types!` invocation will generate this function for you. See the [tutorial](doc:create-a-provider) for more information about using the PDK
-
-#### Signature
-
-```rust
-pub async fn invoke2(request: ProviderRequest) -> Result<Blob>;
-```
-
-#### Description
-
-Invokes the provider to perform a data request.
-
-### `create_cells` (Optional)
-
-#### Signature
-
-```rust
-pub fn create_cells(query_type: String, response: Blob) -> Result<Vec<Cell>>;
-```
-
-#### Description
-
-Creates output cells based on the response (a `Blob` that the provider previously sent to answer an `invoke2` call).  Studio would typically embed the created cells in the provider cell, but other actions could be desired.
-
-When any created cells use a `data-links` field with the value `cell-data:<mime-type>,self` (such as Log cells or Graph cells), Studio will replace the value `self` with the ID of the cell for which the query was invoked. This allows the provider to create cells that reference its own data without knowing the context of the cell in which it was executed.
-
-Note: When the MIME type in the provider response is `application/vnd.fiberplane.cells` (suffixed with either `+json` or `+msgpack`), Studio will elide the call to `create_cells()` and simply parse the data directly to a `Vec<Cell>`. This is what makes `create_cells`'s implementation optional.
-
-### `extract_data` (Optional)
-
-#### Signature
-
-```rust
-pub fn extract_data(response: Blob, mime_type: String, query: Option<String>) -> Result<Blob>;
-```
-
-#### Description
-
-Takes the response data, and returns it in the given MIME type, optionally passing an additional query string to customize extraction behavior.
-
-Returns `Err(Error::UnsupportedRequest)` if an unsupported MIME type is passed.
-
-Note: When the MIME type in the provider response is the same as the MIME type given as the second argument, and the `query` is omitted, the return value is expected to be equivalent to the raw response data. This means Studio should be allowed to elide calls to this function if there is no query string and the MIME type is an exact match. This elision should not change the outcome.
-
-### `get_config_schema` (Optional)
-
-#### Signature
-
-```rust
-pub fn get_config_schema() -> ConfigSchema;
-```
-
-#### Description
-
-Returns the schema for the config consumed by this provider.
-
-Note this schema is only used by Studio to display a configuration form in case the provider is configured as a direct data source. The provider itself is responsible for validating the contents of its config.  Assuming the provider uses Serde for parsing the config, validation is done at that stage.
-
-This function only needs to be implemented by providers that are statically bundled with Studio. You should never have to implement it, it is mentioned here for the sake of completeness.
