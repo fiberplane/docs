@@ -35,7 +35,7 @@ You can do it in the Settings > FPD menu or using our CLI tool.
 
 ### Generate an FPD API Token in the Studio
 
-![Register a proxy](/docs/quickstart/register_a_proxy.png)
+![Register a proxy](/docs/quickstart/register_an_fpd.png)
 
 In order for the Daemon to talk to the Fiberplane Studio successfully it needs to be successfully authorized. This step will generate a **Daemon API Token** that will be needed later.
 
