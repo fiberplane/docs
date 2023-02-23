@@ -40,7 +40,50 @@ And here’s how that will look like in the notebook:
 
 ![Untitled](/docs/cli/fp-run/Untitled.png)
 
-### Rich output
+## Using a specific notebook section
+
+By default, Fiberplane will add your command output to a new code cell in the notebook. However, you can also specify a specific notebook section to send your output to.
+
+```bash
+> fp run <YOUR_SHELL_COMMAND> --send-to <NOTEBOOK_ID> --section <SECTION_NAME>
+```
+
+## Customizing the notebook cell metadata
+
+You can customize the metadata of the notebook cell that Fiberplane creates for your command output. This can be useful if you want to add tags, hide the cell input, or add custom styling.
+
+To customize the metadata, you can create a JSON file with the metadata and pass it to the fp run command using the --metadata-file option:
+
+```
+> fp run <YOUR_SHELL_COMMAND> --send-to <NOTEBOOK_ID> --metadata-file <METADATA_FILE_PATH>
+```
+
+Here's an example metadata file:
+
+```
+{
+  "tags": [
+    "my-tag"
+  ],
+  "hide_input": true,
+  "trusted": true,
+  "deletable": false,
+  "editable": false,
+  "celltoolbar": "Tags",
+  "metadata": {
+    "my-custom-key": "my-custom-value"
+  }
+}
+```
+
+## Sending commands from a file
+
+If you have a long or complex shell command that you want to send to a notebook, you can put it in a file and use the fp run command to send the contents of the file to the notebook.
+
+```
+fp run "$(cat <FILE_PATH>)" --send-to <NOTEBOOK_ID>
+```
+## Rich output
 
 Currently all of the commands and their output is sent to a simple code cell.
 
