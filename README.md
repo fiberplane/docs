@@ -1,10 +1,10 @@
 # Fiberplane Docs
 
-All main Fiberplane Docs are available here as markdown files. To see the rendered preview navigate to our documentation website [docs.fiberplane.com](docs.fiberplane.com)
+All main Fiberplane Docs are available here as markdown files. To see the rendered preview navigate to our documentation website [docs.fiberplane.com](https://docs.fiberplane.com/docs)
 
 ## Editing guide
 
-We use [ReadMe](readme.com) to render our documentations site and host our markdown that we upload through a Github action workflow.
+We use [ReadMe](https://readme.com/) to render our documentations site and host our markdown that we upload through a Github action workflow.
 
 ### Page setup - YAML frontmatter
 
