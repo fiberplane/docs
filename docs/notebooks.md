@@ -44,7 +44,7 @@ Everything you write in a notebook is a **cell**. A cell can contain text (in it
 ## Rich text
 
 Most cells have the ability to display rich text in them. You can **bold**,
-*italicize*, highlight,  ~~strikethrough~~ content or insert `in-line code` and [links](https://www.notion.so/fiberplane/docs.fiberplane.com). Cells include rich markdown support so you can type all of the above characters using their respective syntax:
+*italicize*, highlight,  ~~strikethrough~~ content or insert `in-line code` and [links](https://docs.fiberplane.com/docs). Cells include rich markdown support so you can type all of the above characters using their respective syntax:
 
 <!--markdownlint-disable MD049-->
 
