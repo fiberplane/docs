@@ -85,7 +85,7 @@ You can now:
 
 ## Add Providers
 
-[Setting up Providers](doc:providers)
+[Setting up Providers](doc:setting-up-providers)
 
 ## Deploy
 
