@@ -6,7 +6,7 @@ slug: quickstart
 
 Fiberplane Studio is available for the [Web](https://fiberplane.com/).
 
-To get started go to [https://fiberplane.com/](https://fiberplane.com/) and log in with your Fiberplane account (currently available only for Google Workspace users). You can also go right away to your notebook by typing [fp.new](https://fp.new/) in your URL, however, to save and store your notebook, you will need to log in.
+To get started go to [https://fiberplane.com/](https://fiberplane.com/) and log in with your Fiberplane account (currently available only for Google Workspace users). You can also go right away to your notebook by typing [fp.new](https://fp.new/) in your Address Bar, however, to save and store your notebook, you will need to log in.
 
 ![How it works](/docs/fpd.png)
 
