@@ -45,7 +45,7 @@ function(incidentName='API Outage')
 
   fp.notebook
 
-# Calls a method that adds a title for the notebook passing a harcoded string 
+# Calls a method that adds a title for the notebook passing a hardcoded string 
 # and the parameter concatenated.
 
   .new('Incident Response for: ' + incidentName) 
