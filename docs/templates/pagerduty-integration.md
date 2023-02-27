@@ -44,7 +44,7 @@ If you need help with this integration, please contact ***[support@fiberplane.co
 6. In the **Code source** section double click the folder named **fp-PagerDuty-integration** and then double click **lambda_function.py** to open the file in the code editor.
 7. In a separate browser tab open the **lambda_function.py** page in the PagerDuty integration section of the [Fiberplane Quickstart Repository](https://raw.githubusercontent.com/fiberplane/quickstart/main/integrations/PagerDuty/lambda_function.py) and copy all of the contents of the file.
 
-![Copy the Python lambda function](/docs/pagerduty-integration/2-lambda-function.png)
+![Copy the Python lambda function](/docs/templates/pagerduty-integration/2-lambda-function.png)
 
 1. Switch back to the AWS lambda console in your browser and paste the code into the **lambda_function.py** file in the **Code source** editor**.**
 2. Press **File → Save** in the **Code source** editor.
