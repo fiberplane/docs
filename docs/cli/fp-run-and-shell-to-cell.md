@@ -4,7 +4,7 @@ category: 63d7e8bf2482560ba8b126e0
 slug: fp-run-and-shell-to-cell
 ---
 
-If you’re an SRE or infrastructure engineer - chances are you spend much of your work time in your shell. Besides querying providers from the Fiberplane notebook, you can easily send your shell comand and output data to a notebook to examine and share with your colleagues.
+If you’re an SRE or infrastructure engineer - chances are you spend much of your work time in your shell. Besides querying providers from the Fiberplane notebook, you can easily send your shell command and output data to a notebook to examine and share with your colleagues.
 
 You can achieve this with the `run` or `shell` commands in the Fiberplane CLI tool.
 

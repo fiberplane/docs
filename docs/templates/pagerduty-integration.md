@@ -18,7 +18,7 @@ slug: pagerduty-integration
 
 - A PagerDuty [General access REST API key](https://support.pagerduty.com/docs/api-access-keys#section-generate-a-general-access-rest-api-key) is required for this integration to send the notebook URL back to PagerDuty.
 - Access to an AWS account is required to create a new lambda function.
-- The Fiberplane CLI is required to create a new trigger endpoint for a template. Instructions to install the CLI and log into Fiberplane with it are [here](https://docs.fiberplane.com/cli).
+- The Fiberplane CLI is required to create a new trigger endpoint for a template. Instructions to install the CLI and log into Fiberplane with it are [here](https://docs.fiberplane.com/docs/cli).
 
 ## Support
 
