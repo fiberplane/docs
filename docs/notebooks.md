@@ -108,8 +108,8 @@ Provider cells include cells for querying various data sources. Depending on wha
 
 Currently available Providers:
 
-[Prometheus](https://docs.fiberplane.com/docs/prometheus)
+[Prometheus](doc:prometheus)
 
-[Elasticsearch](https://docs.fiberplane.com/docs/elasticsearch)
+[Elasticsearch](doc:elasticsearch)
 
-[Grafana Loki](https://docs.fiberplane.com/docs/grafana-loki)
+[Grafana Loki](doc:grafana-loki)
