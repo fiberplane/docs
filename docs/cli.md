@@ -45,7 +45,7 @@ fp update
 
 ## Guides
 
-[Create Proxies with the CLI](doc:quickstart)
+[Manage fpd and Providers with the CLI](doc:quickstart)
 
 [Create Templates with the CLI](doc:templates)
 
