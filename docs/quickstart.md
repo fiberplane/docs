@@ -66,7 +66,7 @@ Download and install the Fiberplane CLI
 curl --proto '=https' --tlsv1.2 -sSf https://fp.dev/install.sh | sh
 ```
 
-Or download the Fiberplane CLI manually (make sure to make it executable 
+Or download the Fiberplane CLI manually (make sure to make it executable
 `chmod +x ./fp`):
 
 - [Linux X86](https://fp.dev/fp/latest/x86_64-unknown-linux-gnu/fp)
