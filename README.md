@@ -27,3 +27,14 @@ There are also some nuances when adding links. Instead of the normal markdown re
 ```markdown
 [linked text](doc:the-slug-of-the-linked-piece)
 ```
+To add links, replace `linked text` with the text that you want to display as the link, and `the-slug-of-the-linked-piece` with the slug of the piece that you want to link to. 
+
+#### For Example :
+If you have a file called `getting-started.md` and want to link to it from your `README.md` file, you could use:
+```markdown
+[Getting started](doc:getting-started)
+```
+**Note :**
+When using this format for links in your documentation, make sure that the `slug` matches the actual *filename* or *header* of the piece you are linking to. You can also use this format for linking to other sections within the same document.
+
+Using this format ensures that your links are compatible with your documentation tool, and allows users to easily navigate between different pieces of the documentation.
