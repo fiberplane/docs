@@ -135,7 +135,7 @@ cp -r "${SAMPLE_PROVIDER_PATH}"/* .
 git init .
 ```
 
-Once the repo is created, use the Cargo configuration feature to make the compiler default to Web Assembly compilation. Create a `.cargo` folder at the root of your repository:
+After creating the repo, don't forget to create a .cargo folder at the root of your repository to configure Cargo to compile to Web Assembly by default:
 
 ```shell
 catnip_provider/
@@ -169,7 +169,7 @@ edition = "2021"
 version = "1.0.0"
 ```
 
-You will also need to update the `Cargo.toml` file to replace the "workspace" dependencies with proper standalone ones:
+To use proper standalone dependencies, you'll need to update the Cargo.toml file by replacing the "workspace" dependencies:
 
 ```toml
 # In Cargo.toml
