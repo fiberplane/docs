@@ -12,7 +12,7 @@ slug: deploy-to-docker
 
 In order for the `fpd` to talk to the Fiberplane Studio successfully it needs to be successfully authorized. This step will generate a **`fpd` API Token** that will be needed later.
 
-1. Go to your Fiberplane [Settings page](https://fiberplane.com/settings).
+1. Go to your Fiberplane Settings page.
 2. Click **`+ New`** to register a proxy with a name that identifies the cluster you will install it into (for example, "Production"). This will generate and display a `fpd` API Token that the proxy will use to authenticate with the Fiberplane Studio.
 3. Copy the `fpd` API Token generated in Step 2 for the next step.
 

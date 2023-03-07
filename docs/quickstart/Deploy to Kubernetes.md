@@ -10,15 +10,21 @@ slug: deploy-to-kubernetes
 
 ![Register an FPD](/docs/quickstart/register_an_fpd.png)
 
-In order for the `fpd` to talk to the Fiberplane Studio successfully it needs to be successfully authorized. This step will generate a **`fpd` API Token** that will be needed later.
+In order for the `fpd` to talk to the Fiberplane Studio successfully it needs to
+be successfully authorized. This step will generate a **`fpd` API Token** that
+will be needed later.
 
-1. Go to your Fiberplane [Settings page](https://fiberplane.com/settings).
-2. Click **`+ New`** to register a proxy with a name that identifies the cluster you will install it into (for example, "Production"). This will generate and display a `fpd` API Token that the proxy will use to authenticate with the Fiberplane Studio.
+1. Go to your Fiberplane Settings page.
+2. Click **`+ New`** to register a proxy with a name that identifies the cluster
+	 you will install it into (for example, "Production"). This will generate and
+	 display a `fpd` API Token that the proxy will use to authenticate with the
+	 Fiberplane Studio.
 3. Copy the `fpd` API Token generated in Step 2 for the next step.
 
 ### Deploy the `fpd` to your Kubernetes cluster
 
-1. Create the Kubernetes configuration file and change the Prometheus URL to point to the Prometheus instance(s) inside your cluster:
+1. Create the Kubernetes configuration file and change the Prometheus URL to
+	 point to the Prometheus instance(s) inside your cluster:
 
 ```yaml
 # configmap.yaml
@@ -39,7 +45,8 @@ data:
        url: http://prometheus
 ```
 
-1. Create the Kubernetes deployment file (replace `<token>` with the `fpd` API Token created during the earlier step):
+1. Create the Kubernetes deployment file (replace `<token>` with the `fpd` API
+	 Token created during the earlier step):
 
 ```yaml
 # deployment.yaml
@@ -92,6 +99,8 @@ kubectl apply -f configmap.yml
 kubectl apply -f deployment.yml
 ```
 
-Once you complete your Proxy setup, your data sources linked in the Proxy configuration should be recognized by the Studio - you can verify this again by going to the **Settings > Data Sources** screen.👇
+Once you complete your Proxy setup, your data sources linked in the Proxy
+configuration should be recognized by the Studio - you can verify this again by
+going to the **Settings > Data Sources** screen.👇
 
 ![Untitled](/docs/quickstart/deploy-to-kubernetes/Untitled.png)
