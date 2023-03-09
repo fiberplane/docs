@@ -10,7 +10,15 @@ terminal.
 
 ## Installing the CLI
 
-Download and install the Fiberplane CLI
+Download and install the Fiberplane CLI.
+
+Homebrew:
+
+```bash
+brew install fiberplane/tap/fp
+```
+
+Install script:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://fp.dev/install.sh | sh
