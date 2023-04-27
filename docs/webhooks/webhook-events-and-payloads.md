@@ -35,7 +35,7 @@ Every delivery includes custom headers
 
 ## Example payload
 
-```
+```http request
 POST /delivery HTTP/1.1
 Host: yourdomain.com
 User-Agent: Fiberplane Webhooks (https://docs.fiberplane.com/docs/webhooks)
@@ -113,7 +113,7 @@ The `payload` property is an empty object.
 
 Category: `frontmatter` (1)
 
-An existing front matter property has been updated, a new one has been created or one has been deleted. 
+An existing front matter property has been updated, a new one has been created or one has been deleted.
 You will receive this event for every notebook in the whole workspace.
 
 The `payload` property is a object with the following properties:
@@ -125,10 +125,10 @@ The `payload` property is a object with the following properties:
 
 `diff` object:
 
-| Property   | Type            | Format                              | Description                                                   |
-|------------|-----------------|-------------------------------------|---------------------------------------------------------------|
-| `updates`  | Array<KeyValue> | Key: String / Value: Any JSON value | All front matter keys and their value which have been updated |
-| `removals` | Array<KeyValue> | Key: String / Value: Any JSON value | All front matter keys and their value which have been removed |
+| Property   | Type                     | Format                              | Description                                                   |
+|------------|--------------------------|-------------------------------------|---------------------------------------------------------------|
+| `updates`  | Array of Key Value Pairs | Key: String / Value: Any JSON value | All front matter keys and their value which have been updated |
+| `removals` | Array of Key Value Pairs | Key: String / Value: Any JSON value | All front matter keys and their value which have been removed |
 
 ## `frontmatter.delete`
 

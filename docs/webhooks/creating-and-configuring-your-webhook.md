@@ -39,18 +39,24 @@ Run the above example with
 
 ```shell
 $ python3 -m flask run --host=0.0.0.0 --port=62113
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:62113
+ * Running on http://172.18.119.222:62113
 ```
 
 Now the server will listen for network wide incoming connections on port `62113`.
 However, we will not be able to reach it as we're most likely behind a NAT.
 
 We can work around this by using a HTTP tunnel such as [`ngronk`](https://ngrok.com/),
-[Cloudflare Tunnels](https://www.cloudflare.com/products/tunnel/), [Tailscale Funnel](https://tailscale.com/kb/1223/tailscale-funnel/) 
+[Cloudflare Tunnels](https://www.cloudflare.com/products/tunnel/), [Tailscale Funnel](https://tailscale.com/kb/1223/tailscale-funnel/)
 or [`tunnel.pyjam.as`](https://tunnel.pyjam.as/). The last one only requires Wireguard and
 is a simple one-liner to get set up and running:
 
 ```shell
-$ curl https://tunnel.pyjam.as/62113 > tunnel.conf && wg-quick up ./tunnel.conf 
+$ curl https://tunnel.pyjam.as/62113 > tunnel.conf && wg-quick up ./tunnel.conf
+You can now access http://0.0.0.0:62113 on https://mwk8xc.tunnel.pyjam.as/ ✨
 ```
 
 ## Setting up the webhook
