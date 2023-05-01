@@ -76,7 +76,8 @@ The endpoint URL is the URL to which Fiberplane will send deliveries using a HTT
 Since we're developing locally for the purpose of this tutorial, we'll set it to the URL which
 `tunnel.pyjam.as` gave us above, followed by `/delivery`. Example: `https://mwk8xc.tunnel.pyjam.as/delivery`
 
-If you are configuring a custom endpoint which uses HTTPS, please ensure you are running TLS 1.2 or higher.
+If you are configuring a custom endpoint which uses HTTPS, please ensure you are running TLS 1.2 or higher. The
+certificate must be trusted by the Mozilla Trust Store and cannot be self-signed.
 
 ## Endpoint URL Limitations
 
