@@ -90,10 +90,10 @@ X-Fiberplane-ETag: d901855b7939b02f8525c48241f10cb6a2936b53e922cc626f040188dd1d4
             ]
         },
         "diff": {
-            "updates": [
+            "updates": {
                 "severity": "critical"
-            ],
-            "removals": [],
+            },
+            "removals": {}
         }
     }
 }
@@ -116,19 +116,19 @@ Category: `frontmatter` (1)
 An existing front matter property has been updated, a new one has been created or one has been deleted.
 You will receive this event for every notebook in the whole workspace.
 
-The `payload` property is a object with the following properties:
+The `payload` property is an object with the following properties:
 
-| Property   | Type     | Format                | Description                                                      |
-|------------|----------|-----------------------|------------------------------------------------------------------|
-| `notebook` | Object   | [NotebookSummary][ns] | Summary about the notebook in which the front matter was updated |
-| `diff`     | `Object` | See below             | The difference between before and now                            |
+| Property   | Type   | Format                | Description                                                      |
+|------------|--------|-----------------------|------------------------------------------------------------------|
+| `notebook` | Object | [NotebookSummary][ns] | Summary about the notebook in which the front matter was updated |
+| `diff`     | Object | See below             | The difference between before and now                            |
 
 `diff` object:
 
-| Property   | Type                     | Format                              | Description                                                   |
-|------------|--------------------------|-------------------------------------|---------------------------------------------------------------|
-| `updates`  | Array of Key Value Pairs | Key: String / Value: Any JSON value | All front matter keys and their value which have been updated |
-| `removals` | Array of Key Value Pairs | Key: String / Value: Any JSON value | All front matter keys and their value which have been removed |
+| Property   | Type   | Format                              | Description                                                          |
+|------------|--------|-------------------------------------|----------------------------------------------------------------------|
+| `updates`  | Object | Key: String / Value: Any JSON value | All updated front matter keys and their updated value                |
+| `removals` | Object | Key: String / Value: Any JSON value | All removed front matter keys and their value prior to being removed |
 
 ## `frontmatter.delete`
 
@@ -137,7 +137,7 @@ Category: `frontmatter` (1)
 All front matter properties for a given notebook have been deleted.
 You will receive this event for every notebook in the whole workspace.
 
-The `payload` property is a object with the following properties:
+The `payload` property is an object with the following properties:
 
 | Property   | Type     | Format                | Description                                                      |
 |------------|----------|-----------------------|------------------------------------------------------------------|
