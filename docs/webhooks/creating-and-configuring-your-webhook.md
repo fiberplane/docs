@@ -74,7 +74,7 @@ it asks you. The fields are described below.
 The endpoint URL is the URL to which Fiberplane will send deliveries using a HTTP `POST` request.
 
 Since we're developing locally for the purpose of this tutorial, we'll set it to the URL which
-`tunnel.pyjam.as` gave us above, followed by `/delivery`. Example: `https://mwk8xc.tunnel.pyjam.as/endpoint`
+`tunnel.pyjam.as` gave us above, followed by `/delivery`. Example: `https://mwk8xc.tunnel.pyjam.as/delivery`
 
 If you are configuring a custom endpoint which uses HTTPS, please ensure you are running TLS 1.2 or higher.
 
