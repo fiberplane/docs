@@ -8,8 +8,8 @@ slug: webhooks-security
 After you created your webhook, you received a shared secret which is a random 32 character hexadecimal string.
 If you did not save it, you can update the webhook and request a regeneration of the shared secret.
 
-The request body will be signed with that very shared secret using the algorithm **HMAC SHA-512**. The hex-digest
-will be sent with every request in the `X-Fiberplane-Signature` header. The format of the header is `v1=[signature]`.
+The request body + timestamp will be signed with that very shared secret using the algorithm **HMAC SHA-512**. 
+The hex-digest will be sent with every request in the `X-Fiberplane-Signature` header. The format of the header is `v1=[signature]`.
 
 Keep in mind that this shared secret approach only protects against a third-party sending a fake payload in the name
 of Fiberplane to your endpoint. It does *not* ensure secrecy. If you want to ensure secrecy, we strongly recommend
@@ -30,13 +30,13 @@ import hashlib
 shared_secret = bytes.fromhex(os.environ['FIBERPLANE_WEBHOOK_SHARED_SECRET'])
 app = Flask(__name__)
 
-def verify_payload(data, signature):
-    digest = hmac.new(shared_secret, bytes(data, 'utf8'), hashlib.sha512).hexdigest()
+def verify_payload(data, signature, timestamp):
+    digest = hmac.new(shared_secret, b''.join([bytes(data, 'utf8'),bytes(timestamp, 'utf8')]), hashlib.sha512).hexdigest()
     return hmac.compare_digest(digest, signature)
 
 @app.route("/delivery", methods=["POST"])
 def handle_delivery():
-    if not verify_payload(request.data, request.headers.get("X-Fiberplane-Signature")[3:]):
+    if not verify_payload(request.data, request.headers.get("X-Fiberplane-Signature")[3:], request.headers.get("X-Fiberplane-Timestamp")):
         return "Mismatching signature", 401
 
     payload = request.get_json(force=True)
