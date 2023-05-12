@@ -14,8 +14,8 @@ Choose your architecture and download the files. Keep them in a single folder (s
 
 - [For Mac (Apple Silicon)](https://fp.dev/proxy/latest/aarch64-apple-darwin/proxy.zip)
 - [For Mac (Intel)](https://fp.dev/proxy/latest/x86_64-apple-darwin/proxy.zip)
-- [For Linux (x86)](https://fp.dev/proxy/latest/aarch64-unknown-linux-gnu/proxy.zip)
-- [For Linux (Arm)](https://fp.dev/proxy/latest/x86_64-unknown-linux-gnu/proxy.zip)
+- [For Linux (Arm)](https://fp.dev/proxy/latest/aarch64-unknown-linux-gnu/proxy.zip)
+- [For Linux (x86)](https://fp.dev/proxy/latest/x86_64-unknown-linux-gnu/proxy.zip)
 
 ## Generate a `fpd` API Token in the Studio
 
