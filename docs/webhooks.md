@@ -35,7 +35,7 @@ app = Flask(__name__)
 @app.route("/delivery", methods=["POST"])
 def handle_delivery():
     payload = request.get_json(force=True)
-    
+
     print(f"Received delivery from Fiberplane: {payload}")
     return "OK", 200
 ```
@@ -54,8 +54,7 @@ WARNING: This is a development server. Do not use it in a production deployment.
 Now the server will listen for network wide incoming connections on port `62113`.
 However, we will not be able to reach it as we're most likely behind a NAT.
 
-We can work around this by using an HTTP tunnel such as [`ngronk`](https://ngrok.com/),
-[Cloudflare Tunnels](https://www.cloudflare.com/products/tunnel/), [Tailscale Funnel](https://tailscale.com/kb/1223/tailscale-funnel/)
+We can work around this by using an HTTP tunnel such as [`ngrok`](https://ngrok.com/), [Tailscale Funnel](https://tailscale.com/kb/1223/tailscale-funnel/)
 or [`tunnel.pyjam.as`](https://tunnel.pyjam.as/). The last one only requires Wireguard and
 is a simple one-liner to get set up and running:
 
