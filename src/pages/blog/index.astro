@@ -1,0 +1,162 @@
+---
+import { getCollection } from "astro:content";
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+
+const allPostsUnsorted = await getCollection("blog");
+const postsUnsorted = allPostsUnsorted.filter((b) => b.data.draft !== true);
+const postsSortedByDateDesc = postsUnsorted.toSorted(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const colorVariables = [
+  "--color-tag-blue",
+  "--color-tag-green",
+  "--color-tag-orange",
+  "--color-tag-purple",
+  "--color-tag-yellow"
+];
+
+function getColorValueBasedOnContent(content: string) {
+  let result = 0;
+  for (let index = 0; index < content.length; index++) {
+    result += content.codePointAt(index) ?? 1;
+  }
+
+  return colorVariables[result % colorVariables.length];
+}
+---
+
+<StarlightPage
+  hasSidebar={true}
+  frontmatter={{
+    title: "Blog",
+    description: "Fiberplane likes to write sometimes",
+    template: "splash",
+    banner: {
+      content:
+        '<span>🚀 Check out our Hono-Native API <a href="/blog/hono-native-playground/">Playground</a></span>'
+    }
+  }}
+>
+  <ul class="blog-post-list hide-sidebar">
+    {
+      postsSortedByDateDesc.map((post) => (
+        <li class="blog-post">
+          <h4>
+            <a href={`/blog/${post.id}`}>{post.data.title}</a>
+          </h4>
+
+          <div class="date">
+            {new Date(post.data.date).toLocaleDateString("en-US", {
+              year: "2-digit",
+              month: "2-digit",
+              day: "2-digit"
+            })}
+          </div>
+
+          <ul class="tags">
+            {post.data.tags.toSorted().map((tag) => {
+              const colorVariable = getColorValueBasedOnContent(tag);
+
+              return (
+                <li>
+                  <span style={`--color-tag: var(${colorVariable});`}>
+                    {tag.toLowerCase()}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+</StarlightPage>
+
+<style>
+  :root {
+    --color-tag-blue: var(--fg-info);
+    --color-tag-green: var(--fg-success);
+    --color-tag-orange: var(--fg-brand);
+    --color-tag-purple: var(--fg-tip);
+    --color-tag-yellow: var(--fg-warning);
+  }
+
+  ul.blog-post-list {
+    color: var(--sl-color-accent);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    container: blog-post-list / inline-size;
+
+    &,
+    .tags {
+      list-style: none;
+      padding: 0;
+    }
+
+    li.blog-post {
+      display: grid;
+      gap: 0.5rem;
+
+      h4 {
+        font-size: 1rem;
+        margin: 0;
+      }
+
+      .date {
+        margin: 0;
+        align-self: start;
+        line-height: 1;
+        font-family: monospace;
+        color: var(--sl-color-gray-3);
+      }
+
+      ul.tags {
+        margin: 0;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        line-height: 1;
+        flex-wrap: wrap;
+
+        li {
+          margin: 0;
+        }
+
+        li span {
+          --tag-color: hsl(from var(--color-tag) h s l / 0.9);
+
+          line-height: 1;
+          background: hsl(from var(--color-tag) h s l / 0.1);
+          border: var(--tag-color) 1px solid;
+          color: var(--tag-color);
+
+          font-size: 0.875rem;
+          font-weight: 500;
+          padding: 0.025em 0.25em;
+          border-radius: 0.25rem;
+        }
+      }
+    }
+  }
+
+  @container blog-post-list (width > 400px) {
+    li.blog-post {
+      grid: "title author date" auto "tags tags date" auto / auto auto max-content;
+
+      h4 {
+        grid-area: title;
+      }
+
+      .date {
+        grid-area: date;
+        justify-self: end;
+      }
+
+      ul.tags {
+        grid-area: tags;
+      }
+    }
+  }
+</style>

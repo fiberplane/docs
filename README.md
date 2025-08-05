@@ -1,35 +1,41 @@
-# Fiberplane Docs
+# Fiberplane website and docs
 
-All main Fiberplane Docs are available here as markdown files. To see the
-rendered preview navigate to our documentation website
-[docs.fiberplane.com](https://docs.fiberplane.com/docs)
+This repository contains the code and content for the [Fiberplane website](https://fiberplane.com).
 
-## Editing guide
+It is built with [Astro](https://astro.build) and [Starlight](https://starlight.astro.build).
 
-We use [ReadMe](https://readme.com/) to render our documentations site and host
-our markdown that we upload through a Github action workflow.
+The website is part of the Fiberplane monorepo and is built with [pnpm](https://pnpm.io).
 
-### Page setup - YAML frontmatter
+## Development
 
-ReadMe sets up the right categories in the sidebar and the right links using the
-frontmatter at the top of the documentation.
+To run the website locally, you need to have [pnpm](https://pnpm.io) installed.
 
-The basic format is:
+Then, run the following commands:
 
-```yaml
----
-title: Title of your new page
-category: <category_id> # the category under which it should be nested
-slug: cli # the slug for the cli
----
+```bash
+pnpm install
+pnpm run dev # (or pnpm run dev:www from the root of the repo)
 ```
 
-### Adding links to other docs pages
+## Converting blog posts for dev.to
 
-There are also some nuances when adding links. Instead of the normal markdown
-relative links `[linked text](./relative/link)` we need to use the following
-format:
+If you also want to publish a blogpost on dev.to you need to convert the mdx file to md file. You can leverage co-pilot to help you. In the prompt copy-paste the instructions from dev.to and add a small explainer of what you want to do with the input file.
 
-```markdown
-[linked text](doc:the-slug-of-the-linked-piece)
+Example:
+
+```
+please help me convert this MDX file to a format i can copy paste into dev.to's markdown editor in order to cross publish the blog post.
+
+these are the instructions on dev.to for crafting markdown posts in their editor:
+
+You are currently using the basic markdown editor that uses Jekyll front matter. You can also use the rich+markdown editor you can find in UX settings.
+Editor Basics
+Use Markdown to write and format posts.
+Commonly used syntax
+Embed rich content such as Tweets, YouTube videos, etc. Use the complete URL: {% embed https://... %}. See a list of supported embeds.
+In addition to images for the post's content, you can also drag and drop a cover image.
+Publishing Tips
+Ensure your post has a cover image set to make the most of the home feed and social media platforms.
+Share your post on social media platforms or with your co-workers or local communities.
+Ask people to leave questions for you in the comments. It's a great way to spark additional discussion describing personally why you wrote it or why people might find it helpful.
 ```
