@@ -1,3 +1,61 @@
+.wrangler
+shared/dist
+.env
+.envrc
+.astro
+dist
 
-.next
+# personal script to purge all node modules
+remove_node_modules.sh
+
+# Cursor
+.cursorrules
+
+# Fpx
+.fpxconfig
+
+# Rust targets
+**/target
+target
+
+# Mac
+.DS_Store
+
+# VS Code
+.vscode
+*.code-workspace
+
+# CLion
+.idea
+
+# Package locks
+**/package-lock.json
+**/yarn.lock
+
+# TypeScript / Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versionsgst
 node_modules
+yarn-error.log
+
+# Build tools
+.parcel-cache*
+.nx/cache
+*.tsbuildinfo
+
+# Personal files
+start-dev.sh
+slam-geese.sh
+remove_node_modules.sh
+
+# Ignore .dev.vars files in the examples folder
+examples/**/*.dev.vars
+workflows-api/workflows.db
+playground/dist
+workflows-api/.dev.vars
+.ragrep
+packages/playground/.dev.vars
