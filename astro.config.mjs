@@ -8,7 +8,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 export default defineConfig({
   site: "https://docs.fiberplane.com",
   redirects: {
-    "/docs": "/docs/get-started",
+    "/docs": "/get-started",
   },
   experimental: {
     contentIntellisense: true,
@@ -22,22 +22,21 @@ export default defineConfig({
         alt: "Fiberplane icon logo & text",
       },
       title: "Fiberplane",
-      description:
-        "Fiberplane is an API client and a local debugging companion for Hono API.",
-      social: {
-        github: "https://github.com/fiberplane/fpx",
-        discord: "https://discord.com/invite/cqdY6SpfVR",
-      },
-      sidebar: [
+      description: "Create Model Context Protocol servers by chatting with AI",
+      social: [
         {
-          label: "Docs",
-          items: [
-            {
-              label: "Quickstart",
-              items: ["docs/get-started"],
-            },
-          ],
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/fiberplane/fpx",
         },
+        {
+          icon: "discord",
+          label: "Discord",
+          href: "https://discord.com/invite/cqdY6SpfVR",
+        },
+      ],
+      sidebar: [
+        { label: "Docs", link: "/get-started" },
         { label: "Blog", link: "/blog" },
       ],
       favicon: "/favicon.svg",
