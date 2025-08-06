@@ -28,7 +28,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/fiberplane/fpx",
+          href: "https://github.com/fiberplane",
         },
         {
           icon: "discord",
