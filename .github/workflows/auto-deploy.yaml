@@ -1,0 +1,17 @@
+---
+name: Auto Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ vars.R2_ACCESS_KEY_ID }}
+      R2_BUCKET_NAME: ${{ vars.R2_BUCKET_NAME }}
+    secrets:
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
