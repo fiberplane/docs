@@ -7,9 +7,10 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export default defineConfig({
   site: "https://docs.fiberplane.com",
+  trailingSlash: "always",
   redirects: {
-    "/": "/get-started",
-    "/docs": "/get-started",
+    "/": "/get-started/",
+    "/docs": "/get-started/",
   },
   experimental: {
     contentIntellisense: true,

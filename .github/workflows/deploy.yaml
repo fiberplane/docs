@@ -42,14 +42,11 @@ jobs:
       - name: Build Astro site
         run: pnpm run build
 
-      - name: Configure AWS CLI for R2
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ inputs.R2_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          aws-region: auto
-
       - name: Sync to R2 bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ inputs.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
         run: |
           aws s3 sync dist/ s3://${{ inputs.R2_BUCKET_NAME }} \
             --endpoint-url https://${{ inputs.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com \
