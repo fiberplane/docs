@@ -38,8 +38,8 @@ export default defineConfig({
         },
       ],
       sidebar: [
-        { label: "Docs", link: "/get-started" },
-        { label: "Blog", link: "/blog" },
+        { label: "Docs", link: "/get-started/" },
+        { label: "Blog", link: "/blog/" },
       ],
       favicon: "/favicon.svg",
       head: [
