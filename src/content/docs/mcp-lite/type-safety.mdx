@@ -1,0 +1,87 @@
+---
+title: Type Safety
+description: Automatic type inference and validation with Standard Schema
+---
+
+`mcp-lite` provides comprehensive type safety through Standard Schema validators like Zod, Valibot, Effect, and ArkType.
+
+## Automatic Type Inference
+
+Standard Schema validators provide automatic type inference for your tool handlers:
+
+```typescript
+import { z } from "zod";
+
+const SearchSchema = z.object({
+  query: z.string(),
+  limit: z.number().optional(),
+  filters: z.array(z.string()).optional(),
+});
+
+server.tool("search", {
+  inputSchema: SearchSchema,
+  handler: (args) => {
+    // args is typed as { query: string, limit?: number, filters?: string[] }
+    args.query.toLowerCase();
+    args.limit ?? 10;
+    args.filters?.map((f) => f.trim());
+
+    return { content: [{ type: "text", text: "..." }] };
+  },
+});
+```
+
+## Structured Outputs
+
+Tools can return both human-readable content and machine-readable structured data. Use `outputSchema` to define the shape of `structuredContent`:
+
+```typescript
+const WeatherOutputSchema = z.object({
+  temperature: z.number(),
+  conditions: z.string(),
+});
+
+server.tool("getWeather", {
+  inputSchema: z.object({ location: z.string() }),
+  outputSchema: WeatherOutputSchema,
+  handler: (args) => ({
+    content: [
+      {
+        type: "text",
+        text: `Weather in ${args.location}: 22°C, sunny`,
+      },
+    ],
+    // structuredContent is typed and validated at runtime
+    structuredContent: {
+      temperature: 22,
+      conditions: "sunny",
+    },
+  }),
+});
+```
+
+The `outputSchema` provides runtime validation and type inference for `structuredContent`.
+
+See the [MCP structured content spec](https://modelcontextprotocol.io/specification/2025-06-18/server/tools#structured-content) for protocol details.
+
+## Context API
+
+The handler context provides typed access to session data, authentication, and client capabilities:
+
+```typescript
+handler: (args, ctx) => {
+  ctx.progress?.({ progress: 50, total: 100 });
+  ctx.session?.id;
+  ctx.authInfo?.userId;
+  ctx.state.myCustomData = "...";
+
+  const validated = ctx.validate(MySchema, data);
+
+  if (ctx.client.supports("elicitation")) {
+    const result = await ctx.elicit({
+      message: "Confirm action?",
+      schema: z.object({ confirmed: z.boolean() }),
+    });
+  }
+};
+```

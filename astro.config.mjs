@@ -38,7 +38,47 @@ export default defineConfig({
         },
       ],
       sidebar: [
-        { label: "Docs", link: "/get-started/" },
+        { label: "Get Started", link: "/get-started/" },
+        {
+          label: "mcp-lite",
+          items: [
+            { label: "Overview", link: "/mcp-lite/" },
+            { label: "Quick Start", link: "/mcp-lite/quick-start/" },
+            { label: "Type Safety", link: "/mcp-lite/type-safety/" },
+            { label: "Scaling with Adapters", link: "/mcp-lite/scaling/" },
+            { label: "Runtime Environments", link: "/mcp-lite/runtime-environments/" },
+            {
+              label: "MCP Concepts",
+              collapsed: true,
+              items: [
+                { label: "Overview", link: "/mcp-lite/concepts/" },
+                { label: "Tools", link: "/mcp-lite/concepts/tools/" },
+                { label: "Resources", link: "/mcp-lite/concepts/resources/" },
+                { label: "Prompts", link: "/mcp-lite/concepts/prompts/" },
+                { label: "Elicitation", link: "/mcp-lite/concepts/elicitation/" },
+                { label: "Sampling", link: "/mcp-lite/concepts/sampling/" },
+              ],
+            },
+            {
+              label: "Advanced",
+              collapsed: true,
+              items: [
+                { label: "Overview", link: "/mcp-lite/advanced/" },
+                { label: "Middleware", link: "/mcp-lite/advanced/middleware/" },
+                { label: "Server Composition", link: "/mcp-lite/advanced/composition/" },
+                { label: "Error Handling", link: "/mcp-lite/advanced/error-handling/" },
+                { label: "Sessions", link: "/mcp-lite/advanced/sessions/" },
+              ],
+            },
+            { label: "Protocol", link: "/mcp-lite/protocol/" },
+          ],
+        },
+        {
+          label: "mcp-gateway",
+          items: [
+            { label: "Overview", link: "/mcp-gateway/" },
+          ],
+        },
         { label: "Blog", link: "/blog/" },
       ],
       favicon: "/favicon.svg",

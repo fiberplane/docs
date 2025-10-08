@@ -1,0 +1,68 @@
+---
+title: Sessions
+description: Stateless vs stateful modes
+---
+
+Choose between stateless and stateful operation based on your needs.
+
+## Stateless Mode
+
+Default mode with no session management:
+
+```typescript
+const transport = new StreamableHttpTransport();
+```
+
+**Use when:**
+
+- Building simple, request-response tools
+- You don't need progress notifications
+- You don't need elicitation or sampling
+- You want minimal configuration
+
+## Stateful Mode
+
+Enable sessions for SSE streaming and event replay:
+
+```typescript
+import { StreamableHttpTransport, InMemorySessionAdapter } from "mcp-lite";
+
+const transport = new StreamableHttpTransport({
+  sessionAdapter: new InMemorySessionAdapter({
+    maxEventBufferSize: 1024,
+  }),
+});
+```
+
+**Enables:**
+
+- Session persistence across requests
+- SSE streaming via GET endpoint
+- Event replay for reconnections
+- Progress notifications
+
+## With Client Requests
+
+Add client request support for elicitation and sampling:
+
+```typescript
+import {
+  StreamableHttpTransport,
+  InMemorySessionAdapter,
+  InMemoryClientRequestAdapter,
+} from "mcp-lite";
+
+const transport = new StreamableHttpTransport({
+  sessionAdapter: new InMemorySessionAdapter({
+    maxEventBufferSize: 1024,
+  }),
+  clientRequestAdapter: new InMemoryClientRequestAdapter({
+    defaultTimeoutMs: 30000,
+  }),
+});
+```
+
+**Enables everything above plus:**
+
+- Elicitation (requesting user input mid-execution)
+- Sampling (requesting LLM completions from the client)

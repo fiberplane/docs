@@ -1,0 +1,68 @@
+---
+title: Quick Start
+description: Get up and running with mcp-lite in minutes
+---
+
+## Installation
+
+```bash
+npm install mcp-lite
+```
+
+## Basic Example
+
+Spin up a minimal MCP server with Hono and Zod:
+
+```typescript
+import { Hono } from "hono";
+import { McpServer, StreamableHttpTransport } from "mcp-lite";
+import { z } from "zod";
+
+const mcp = new McpServer({
+  name: "example-server",
+  version: "1.0.0",
+  schemaAdapter: (schema) => z.toJSONSchema(schema as z.ZodType),
+});
+
+const WeatherInputSchema = z.object({
+  location: z.string(),
+});
+
+const WeatherOutputSchema = z.object({
+  temperature: z.number(),
+  conditions: z.string(),
+});
+
+mcp.tool("getWeather", {
+  description: "Gets weather information for a location",
+  inputSchema: WeatherInputSchema,
+  outputSchema: WeatherOutputSchema,
+  handler: (args) => ({
+    content: [
+      {
+        type: "text",
+        text: `Weather in ${args.location}: 22°C, sunny`,
+      },
+    ],
+    structuredContent: {
+      temperature: 22,
+      conditions: "sunny",
+    },
+  }),
+});
+
+const transport = new StreamableHttpTransport();
+const httpHandler = transport.bind(mcp);
+
+const app = new Hono();
+app.all("/mcp", async (c) => {
+  const response = await httpHandler(c.req.raw);
+  return response;
+});
+```
+
+## Next Steps
+
+- Learn about [Type Safety](/mcp-lite/type-safety/) and automatic type inference
+- Explore [MCP Concepts](/mcp-lite/concepts/) like tools, resources, and prompts
+- See how to [Scale with Adapters](/mcp-lite/scaling/) when you need state management
