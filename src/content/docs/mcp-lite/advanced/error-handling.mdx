@@ -1,0 +1,58 @@
+---
+title: Error Handling
+description: Structured error responses and custom error handlers
+---
+
+Throw `RpcError` to return structured JSON-RPC failures or customize `onError` for fallback logic.
+
+## Using RpcError
+
+Return structured JSON-RPC error responses:
+
+```typescript
+import { RpcError, JSON_RPC_ERROR_CODES } from "mcp-lite";
+
+server.tool("divide", {
+  inputSchema: z.object({ a: z.number(), b: z.number() }),
+  handler: (args) => {
+    if (args.b === 0) {
+      throw new RpcError(
+        JSON_RPC_ERROR_CODES.INVALID_PARAMS,
+        "Division by zero",
+      );
+    }
+    return {
+      content: [{ type: "text", text: String(args.a / args.b) }],
+    };
+  },
+});
+```
+
+## Custom Error Handler
+
+Handle application-specific errors:
+
+```typescript
+server.onError((error, ctx) => {
+  if (error instanceof MyCustomError) {
+    return {
+      code: -32001,
+      message: "Custom error",
+      data: { requestId: ctx.requestId },
+    };
+  }
+  // Return undefined for default handling
+});
+```
+
+## Error Codes
+
+Common JSON-RPC error codes:
+
+- `-32700` - Parse error
+- `-32600` - Invalid request
+- `-32601` - Method not found
+- `-32602` - Invalid params
+- `-32603` - Internal error
+
+Custom application errors should use codes outside this range (e.g., `-32000` to `-32099`).

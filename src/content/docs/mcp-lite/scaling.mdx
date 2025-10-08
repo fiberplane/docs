@@ -1,0 +1,88 @@
+---
+title: Scaling with Adapters
+description: Start simple and add state only when you need it
+---
+
+You can begin with a single file server and add state only when you need it. Adapters let you swap in storage or queueing code without touching tools or handlers.
+
+## Scaling Playbook
+
+- **Local prototyping:** Run the transport with no adapters. Every request is stateless and there is nothing to clean up.
+- **Single server:** Add `InMemorySessionAdapter` (and optionally `InMemoryClientRequestAdapter`) so progress notifications and elicitations can span multiple requests from the same client.
+- **Distributed or serverless:** Implement the adapters against shared infrastructure (Redis, SQL, message queues, Durable Objects, etc.).
+
+## Deployment Patterns
+
+| Environment   | Session Storage | State Storage | Transport Configuration     |
+| ------------- | --------------- | ------------- | --------------------------- |
+| Development   | None            | N/A           | `StreamableHttpTransport()` |
+| Single server | In-memory       | In-memory     | `InMemorySessionAdapter`    |
+| Distributed   | Redis/KV        | Redis/KV      | Custom adapters             |
+
+## Adapter Configuration
+
+### Development: Stateless
+
+```typescript
+const transport = new StreamableHttpTransport();
+```
+
+### Production: With Sessions
+
+```typescript
+const transport = new StreamableHttpTransport({
+  sessionAdapter: new InMemorySessionAdapter({
+    maxEventBufferSize: 1024,
+  }),
+  clientRequestAdapter: new InMemoryClientRequestAdapter({
+    defaultTimeoutMs: 30000,
+  }),
+});
+```
+
+## Built-in Adapters
+
+- **InMemorySessionAdapter** - Session storage in memory
+- **InMemoryClientRequestAdapter** - Client request tracking in memory
+
+## Client Requests and Elicitation
+
+The server can send JSON-RPC requests back to the MCP client (for example when you call `ctx.elicit`). Those requests are routed through the `ClientRequestAdapter`. Provide one when you need:
+
+- Timeouts or retries for client prompts
+- To make sure an elicitation response is delivered even when the original POST is finished
+- To back the pending requests with shared storage in a multi-instance deployment
+
+The in-memory adapter covers local runs. For production you can implement `ClientRequestAdapter` using Redis, a SQL store, Durable Objects, or any queue that can look up pending requests by session and request id.
+
+## Custom Adapters
+
+Implement these interfaces for custom storage:
+
+```typescript
+interface SessionAdapter {
+  generateSessionId(): string;
+  create(id: string, meta: SessionMeta): Promise<SessionData>;
+  has(id: string): Promise<boolean>;
+  get(id: string): Promise<SessionData | undefined>;
+  appendEvent(id: string, streamId: string, message: unknown): Promise<EventId>;
+  replay(id: string, lastEventId: EventId, write: WriteFunction): Promise<void>;
+  delete(id: string): Promise<void>;
+}
+
+interface ClientRequestAdapter {
+  createPending(
+    sessionId: string,
+    requestId: string,
+    options,
+  ): { promise: Promise<Response> };
+  resolvePending(
+    sessionId: string,
+    requestId: string,
+    response: Response,
+  ): boolean;
+  rejectPending(sessionId: string, requestId: string, error: Error): boolean;
+}
+```
+
+See the Cloudflare Worker KV example for a production implementation using Cloudflare KV.

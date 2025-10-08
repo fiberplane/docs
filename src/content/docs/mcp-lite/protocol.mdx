@@ -1,0 +1,43 @@
+---
+title: Protocol
+description: MCP protocol version and JSON-RPC compliance
+---
+
+`mcp-lite` supports MCP protocol version `2025-06-18` with JSON-RPC 2.0 compliance.
+
+## Protocol Version
+
+The library implements the [Model Context Protocol specification version 2025-06-18](https://modelcontextprotocol.io/specification/2025-06-18/).
+
+## JSON-RPC 2.0
+
+All communication follows the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) specification:
+
+- Request format with `jsonrpc`, `method`, `params`, and `id`
+- Response format with `result` or `error`
+- Batch requests supported
+- Notification support (requests without `id`)
+
+## Transport
+
+The default transport uses HTTP + Server-Sent Events (SSE):
+
+- **POST requests**: For tool calls, prompt generation, and resource access
+- **GET requests**: For SSE streaming when sessions are enabled
+- **Fetch API**: Works anywhere `Request` and `Response` are available
+
+## Capabilities
+
+The server advertises capabilities during initialization:
+
+```json
+{
+  "tools": true,
+  "resources": true,
+  "prompts": true,
+  "elicitation": true,
+  "sampling": true
+}
+```
+
+Capabilities are automatically determined based on what features you use in your server implementation.

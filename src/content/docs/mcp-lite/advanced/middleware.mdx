@@ -1,0 +1,61 @@
+---
+title: Middleware
+description: Apply logic to every request before it reaches handlers
+---
+
+`mcp-lite` lets you apply Hono-style middleware to every request before it reaches a tool or prompt handler.
+
+## Logging
+
+Track request timing and performance:
+
+```typescript
+server.use(async (ctx, next) => {
+  const start = Date.now();
+  await next();
+  console.log(`${ctx.request.method} took ${Date.now() - start}ms`);
+});
+```
+
+## Authentication
+
+Validate tokens and populate context:
+
+```typescript
+server.use(async (ctx, next) => {
+  const token = ctx.request.headers?.get?.("Authorization");
+  if (!token) throw new Error("Unauthorized");
+  ctx.state.user = await validateToken(token);
+  await next();
+});
+```
+
+## Rate Limiting
+
+Protect your server from abuse:
+
+```typescript
+server.use(async (ctx, next) => {
+  const userId = ctx.state.user?.id;
+  if (await isRateLimited(userId)) {
+    throw new Error("Rate limit exceeded");
+  }
+  await next();
+});
+```
+
+## Middleware Order
+
+Middleware runs in the order it's registered:
+
+```typescript
+server
+  .use(loggingMiddleware) // Runs first
+  .use(authMiddleware) // Runs second
+  .use(rateLimitMiddleware) // Runs third
+  .tool("myTool", {
+    handler: (args, ctx) => {
+      // ctx.state.user is available here from authMiddleware
+    },
+  });
+```

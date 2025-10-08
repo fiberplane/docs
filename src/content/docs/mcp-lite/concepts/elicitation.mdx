@@ -1,0 +1,58 @@
+---
+title: Elicitation
+description: Request input from clients mid-execution
+---
+
+Elicitation lets a tool request input from the client mid-execution. `mcp-lite` wires this through the handler context.
+
+## Basic Example
+
+```typescript
+import { z } from "zod";
+
+server.tool("delete_record", {
+  inputSchema: z.object({
+    recordId: z.string(),
+    tableName: z.string(),
+  }),
+  handler: async (args, ctx) => {
+    if (!ctx.client.supports("elicitation")) {
+      throw new Error("Elicitation not supported");
+    }
+
+    const response = await ctx.elicit({
+      message: `Delete record "${args.recordId}" from "${args.tableName}"?`,
+      schema: z.object({ confirmed: z.boolean() }),
+    });
+
+    if (response.action === "accept" && response.content.confirmed) {
+      await deleteFromDatabase(args.tableName, args.recordId);
+      return { content: [{ type: "text", text: "Record deleted" }] };
+    }
+
+    return { content: [{ type: "text", text: "Deletion cancelled" }] };
+  },
+});
+```
+
+## Required Configuration
+
+Elicitation requires both adapters:
+
+```typescript
+const transport = new StreamableHttpTransport({
+  sessionAdapter: new InMemorySessionAdapter({ maxEventBufferSize: 1024 }),
+  clientRequestAdapter: new InMemoryClientRequestAdapter({
+    defaultTimeoutMs: 30000,
+  }),
+});
+```
+
+## How It Works
+
+1. Your tool calls `ctx.elicit()` with a message and schema
+2. The client receives the elicitation request
+3. The client prompts the user and sends back a response
+4. Your tool handler continues with the response
+
+This enables interactive workflows where tools can ask for confirmation or additional input during execution.

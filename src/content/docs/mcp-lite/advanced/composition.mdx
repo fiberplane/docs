@@ -1,0 +1,55 @@
+---
+title: Server Composition
+description: Group smaller servers together while preserving their tooling and middleware
+---
+
+Group smaller servers together while preserving their tooling and middleware.
+
+## Basic Composition
+
+Create separate servers for different concerns:
+
+```typescript
+const gitServer = new McpServer({ name: "git", version: "1.0.0" })
+  .tool("clone", {
+    /* ... */
+  })
+  .tool("commit", {
+    /* ... */
+  });
+
+const dbServer = new McpServer({ name: "database", version: "1.0.0" })
+  .tool("query", {
+    /* ... */
+  })
+  .tool("migrate", {
+    /* ... */
+  });
+```
+
+## With Namespacing
+
+Prefix tool names to avoid collisions:
+
+```typescript
+const app = new McpServer({ name: "app", version: "1.0.0" })
+  .group("git", gitServer) // Registers: git/clone, git/commit
+  .group("db", dbServer); // Registers: db/query, db/migrate
+```
+
+## Without Namespacing
+
+Merge tools directly:
+
+```typescript
+const app = new McpServer({ name: "app", version: "1.0.0" })
+  .group(gitServer) // Registers: clone, commit
+  .group(dbServer); // Registers: query, migrate
+```
+
+## Benefits
+
+- **Modularity**: Each server focuses on one domain
+- **Reusability**: Share servers across projects
+- **Maintainability**: Test and update servers independently
+- **Isolation**: Middleware and configuration stay scoped to each server
