@@ -38,7 +38,7 @@ export default defineConfig({
         },
       ],
       sidebar: [
-        { label: "Docs", link: "/get-started/" },
+        // { label: "Docs", link: "/get-started/" },
         { label: "Blog", link: "/blog/" },
       ],
       favicon: "/favicon.svg",
