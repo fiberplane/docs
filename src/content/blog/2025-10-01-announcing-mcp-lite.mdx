@@ -1,0 +1,56 @@
+---
+title: "MCP Lite: The Lightweight Way to Build MCP Servers"
+description: "MCP Lite: The Lightweight Way to Build MCP Servers"
+slug: announcing-mcp-lite
+date: 2025-10-01
+author: Micha "mies" Hernandez van Leuffen
+tags:
+  - mcp
+  - sdk
+---
+
+The [Model Context Protocol](https://modelcontextprotocol.io/) is quickly becoming the connective tissue of the AI ecosystem. Agents do not want Swagger pages or hand-rolled client SDKs. They want tool calls: explicit capabilities with schemas, permissions, context, and a live back-and-forth. That shift moves integration away from static REST resources toward actions that are validated, observable, and composable. In other words, your next integration looks less like an endpoint and more like a tool.
+MCP Lite is making that shift ergonomic. It’s a TypeScript-first, HTTP-first library for building MCP servers. Inspired by Hono in both philosophy and ergonomics it has minimal dependencies, is runtime-agnostic, and focused on composability. You can run it anywhere—Node, [Cloudflare Workers](https://workers.cloudflare.com/), [Bun](https://bun.sh/s), [Deno](https://deno.land/) —and layer it into your existing web stack.
+Today it’s open source and now generally available.
+
+At its core, MCP Lite gives you:
+* Lightweight & zero-dependency Embed quickly with a tiny footprint — drop it in, register your tools, and go.
+* TypeScript-first & type-safe Strong typing across tools, resources, and prompts means autocomplete and compile-time checks keep development predictable.
+* Streamable HTTP transport Built for web servers and streaming workflows, delivering real-time output for better UX and lower latency.
+* Schema adapter + validation Native support for Zod, Valibot, or JSON Schema to validate inputs once and trust them forever.
+* Composable middleware & error handling Plug in auth, logging, and rate limits with minimal boilerplate for flexible, production-ready error handling.
+* MCP protocol compliant & example-driven Implements MCP for compatibility with clients and ships with playground examples so you can prototype fast.
+
+Below an example of what you can expect form the mcp-lite API design:
+
+```typescript
+import { Hono } from "hono"
+import { McpServer, StreamableHttpTransport } from "mcp-lite"
+import { z } from "zod"
+
+const server = new McpServer({
+  name: "my-server",
+  version: "1.0.0",
+  schemaAdapter: (schema) => z.toJSONSchema(schema as z.ZodType)
+}).tool("echo", {
+  inputSchema: z.object({ message: z.string() }),
+  handler: (args) => ({ content: [{ type: "text", text: args.message }] })
+})
+
+const transport = new StreamableHttpTransport()
+const handler = transport.bind(server)
+const app = new Hono()
+app.all("/mcp", (c) => handler(c.req.raw))
+export default app
+```
+
+We just added support for structured outputs in tool calls alongside `_meta` and `title` field support for tools, prompts, and responses. These optional fields allow servers to attach arbitrary metadata for UI display, filtering, and custom client logic.
+
+With the `create-mcp-lite` starter you can kickstart a new MCP Lite project with a simple command. For instance with bun:
+
+```
+bun create mcp-ltie
+```
+
+Watch the latest Call my Agent [episode](https://www.youtube.com/watch?v=7KgPFGe1jb0) that touches on the latest releases and what’s next in debugging MCPs.
+MCP Lite is open source and ready to try today on [GitHub](https://github.com/fiberplane/mcp-lite).
